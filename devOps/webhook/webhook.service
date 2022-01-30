@@ -1,0 +1,28 @@
+# /lib/systemd/system/webhook.service
+# /etc/systemd/system/multi-user.target.wants/webhook.service
+
+[Unit]
+Description=webhook service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+User=ec2-user
+PermissionsStartOnly=true
+ExecStart=/home/ec2-user/app/main.py
+TimeoutSec=600
+Restart=on-failure
+RuntimeDirectoryMode=755
+
+-------------
+
+[Unit]
+Description = webhook service for github
+After = network.target
+
+[Service]
+ExecStart = /home/ec2-user/app/main.py
+
+[Install]
+WantedBy = multi-user.target
