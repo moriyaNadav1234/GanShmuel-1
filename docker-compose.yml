@@ -1,0 +1,46 @@
+version: "3.7"
+
+services:
+  #Weight Service
+  weight_service:
+    build:
+      context: ./devOps/docker/weight/
+      dockerfile: Dockerfile
+    image: weight_service
+    container_name: weight_service
+    restart: unless-stopped
+    tty: true
+    working_dir: /app
+    volumes:
+      - app_data:/app/data/
+    ports:
+      - "8080:80"
+    networks:
+      - app_network
+
+  #Weight Service
+  billing_service:
+    build:
+      context: ./devOps/docker/billing/
+      dockerfile: Dockerfile
+    image: billing_service
+    container_name: billing_service
+    restart: unless-stopped
+    tty: true
+    working_dir: /app
+    volumes:
+      - app_data:/app/data/
+    ports:
+      - "8081:80"
+    networks:
+      - app_network
+
+#Docker Networks
+networks:
+  app_network:
+    driver: bridge
+
+#Volumes
+volumes:
+  app_data:
+    driver: local

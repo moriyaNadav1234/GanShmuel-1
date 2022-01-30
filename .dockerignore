@@ -1,0 +1,6 @@
+.DS_Store
+.idea
+/src/data/*
+/src/venv/*
+/src/ext/*
+*.pyc
