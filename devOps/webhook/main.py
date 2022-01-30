@@ -9,11 +9,9 @@ def process():
     data = json.loads(request.data)
 
     # Call bash script to process for git trigger
-    subprocess.call("/home/ec2-user/app/process.sh")
+    subprocess.check_call("./process.sh '%s'" % data['ref'], shell=True)
 
-    # ref = data['ref']
     # commits = json.dumps(data['commits'])
-    # return commits
     return data['ref']
 
 
