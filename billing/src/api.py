@@ -46,7 +46,7 @@ def db_health():
 @app.route('/provider',methods=['POST'])
 def Insert_provider():
 
-    if request.form['name'] == None or request.form['name'].isspace():
+    if request.form['name'] == None or len(request.form['name']) == 0:
         LOG("Invalid data provided! Cannot insert into Provider table",LOG_TYPE.ERROR)
         return "BAD"
     
@@ -64,6 +64,7 @@ def Insert_provider():
         val = (request.form['name'],)
         
         mycursor.execute(sql,val)
+        
         db.commit()#Commit changes of the SQL Query
 
         LOG("Inserted new record into Provider table",LOG_TYPE.INFO)
@@ -81,7 +82,7 @@ def Insert_provider():
 @app.route('/provider/<id>',methods=['PUT'])
 def Update_provider(id):
 
-    if request.form['name'] == None or request.form['name'].isspace():
+    if request.form['name'] == None or len(request.form['name']) == 0:
         LOG("Invalid data provided! Cannot Update Provider table",LOG_TYPE.ERROR)
         return "BAD"
     
@@ -111,15 +112,59 @@ def Update_provider(id):
     
     return "BAD"
 
-'''
 @app.route('/truck',methods=['POST'])
 def Insert_truck():
-    mycursor = mydb.cursor()
 
-    sql = "INSERT INTO Trucks (id,provider_id) VALUES (%s,%s)"
-    val = (request.form['provider'],request.form['id'])
+    #Open connection to the database
+    db = connect()
+    if db == None:
+        return "BAD"
 
-    mycursor.execute(sql,val)
-    mydb.commit()
+    try:
+        mycursor = db.cursor()
+        sql = "INSERT INTO Trucks (id,provider_id) VALUES (%s,%s)"
+        val = (request.form['id'],request.form['provider'])
+        
+        mycursor.execute(sql,val)
+        db.commit()
+
+        LOG("Inserted new record into Trucks table successfully!",LOG_TYPE.INFO)
+
+        return "OK"
+    except:
+        LOG("Failed to insert new record into Trucks table",LOG_TYPE.ERROR)
+        pass
+    finally:
+        LOG("Closing connection to database...",LOG_TYPE.INFO)
+        db.close()
+
+    return "BAD"
+
+@app.route("/truck/<id>",methods=['PUT'])
+def Update_ProviderID(id):
+
+    #Open connection to the database
+    db = connect()
+    if db == None:
+        return "BAD"
+    
+    try:
+        mycursor = db.cursor()
+        
+        sql = "UPDATE Trucks SET provider_id=%s WHERE id=%s"
+        val = (request.form['provider_id'],id)
+
+        mycursor.execute(sql,val)
+        db.commit()
+
+        LOG("Updated Trucks table Column[provider_id] successfully!",LOG_TYPE.INFO)
+
+        return "OK"
+    except:
+        LOG("Failed to Update Trucks table",LOG_TYPE.ERROR)
+        pass
+    finally:
+        LOG("Closing connection to database...",LOG_TYPE.INFO)
+        db.close()
+    
     return "OK"
-'''
