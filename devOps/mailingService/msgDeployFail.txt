@@ -1,0 +1,9 @@
+Dear ${PERSON_NAME},
+
+Your attention is needed!
+Production Server - Deploy Failed! 
+
+${TIME_OF_ERROR}
+
+Regards,
+Blue DevOps Team
