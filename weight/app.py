@@ -19,10 +19,13 @@ def weight():
     try:
         #conncet to DB
         mydb = mysql.connector.connect(
-        host="weight_weightMySql_1",
+        host="weightMySql",
+        port='3306',
+        database="weight",
         user="root",
         password="1234"
         )
+
         #used to send queries
         mycursor = mydb.cursor()
         if request.method=='GET':
@@ -64,7 +67,11 @@ def weight():
 
     mycursor.execute("SELECT * FROM transactions")
     myresult = mycursor.fetchall()
-    return myresult #TODO: test only use: return 'this is route weight'
+    y=[]
+    for x in myresult:
+        y.append(str(x))
+
+    return str(y) #TODO: test only use: return 'this is route weight'
 
 @app.route('/')
 def hello():
