@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  falskApp:
+    image: flask_app:2
+    ports:
+     - '5000:5000'
+    volumes:
+     - ./app.py:/python-docker/app.py
+    networks:
+     - backend
+
+  weightMySql:
+    image: mysql:5.7
+    environment:
+     MYSQL_ROOT_PASSWORD: '1234'
+    volumes:
+     - $PWD/sqlFile:/database
+     - sqlData:/var/lib/mysql
+    networks:
+     - backend
+
+volumes:
+ sqlData:
+
+networks:
+ backend:
