@@ -1,5 +1,4 @@
 from datetime import datetime
-import email
 from string import Template
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -10,6 +9,7 @@ _password='13578642'
 
 _timeOfEvent=datetime.now()
 
+# create 3 mailing lists - DevOps only, Billing+DevOps, Weight+DevOps
 def getContacts(filename):
     names = []
     emails = []

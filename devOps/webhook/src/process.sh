@@ -1,4 +1,9 @@
+### we moved to process.py
+### this file is depreciated
+
 #!/bin/bash
+
+
 
 ref=$1
 branch_name=${ref##refs/heads/}
