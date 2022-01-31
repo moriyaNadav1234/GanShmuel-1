@@ -7,11 +7,13 @@ echo "ref $1" >> /app/test.log
 echo "branch $branch_name" >> /app/test.log
 
 function get_code() {
-  git clone git@github.com:develeapDorZ/GanShmuel.git >> /app/test.log
-  cd GanShmuel
-  git checkout "${branch_name}" >> /app/test.log
-  git fetch --prune >> /app/test.log
-  git pull >> /app/test.log
+  #git clone git@github.com:develeapDorZ/GanShmuel.git >> /app/test.log
+  #cd GanShmuel
+  #git checkout "${branch_name}" >> /app/test.log
+  #git fetch --prune >> /app/test.log
+  #git pull >> /app/test.log
+
+  docker-compose -f ../../billing/docker-compose.yml up
 }
 
 function testing() {
