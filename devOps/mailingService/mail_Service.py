@@ -3,11 +3,10 @@ from string import Template
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from unittest import case
 import constants
 
-
-
-_timeOfEvent=datetime.now()
+# TODO: DONE! create a function that will recive a maling list, success/fail, deploy/build and will build a mail accordingly. 
 
 # create 3 mailing lists - DevOps only, Billing+DevOps, Weight+DevOps
 def getContacts(filename):
@@ -26,19 +25,43 @@ def readTemplate(filename):
 
 s = smtplib.SMTP(host='smtp.gmail.com', port=587)
 s.starttls()
-s.login(mailAddress,password)
-
-names, emails = getContacts('contacts.txt')
-# if fail - use Fail, if success - use Success
-message_template = readTemplate('msgDeploySuccess.txt')
-
-for name, email in zip(names, emails): #building the email msg object:
-    msg = MIMEMultipart() # created the mail
-    message = message_template.substitute(PERSON_NAME=name.title(), TIME_OF_ERROR=_timeOfEvent) #add the actual name to the template
-    msg['From']=_mailAddress
-    msg['To']=email
-    msg['Subject']='Test Mail for DevWeek'
-    msg.attach(MIMEText(message,'plain'))
-    s.send_message(msg) #sending the actual email
+s.login(constants.mailAddress,constants.password)
     
-    del msg
+
+def mailNotification(proc, team, status ): #proc = build/deploy, team = mailinglist, status = success/fail
+    match team: # select mailing list
+        case 'billing': # B&DO
+            names, emails = getContacts('Billing_DevOps_MailingList.txt')
+            
+        case 'weight': # W&DO
+            names, emails = getContacts('Weight_DevOps_MailingList.txt')
+            
+        case 'devops': 
+            names, emails = getContacts('DevOps_MailingList.txt')
+    
+    match status: # select EMail Template
+        case True: 
+            message_template = readTemplate('msgSuccess.txt')
+            st = 'Success'
+        
+        case False : 
+            message_template = readTemplate('msgFail.txt')
+            st = 'Failed'
+    
+    timeOfEvent=datetime.now() # simulated time of event 
+    
+    for name, email in zip(names, emails): #building the email msg object:
+        msg = MIMEMultipart() # created the mail
+        message = message_template.substitute(PERSON_NAME=name.title(), TIME_STAMP=timeOfEvent, PROCCESS=proc.upper()) #add the actual name to the template
+        msg['From']=constants.mailAddress
+        msg['To']=email
+        msg['Subject']=f'Important Update - {proc.upper()} proccess ${st.upper()}'
+        msg.attach(MIMEText(message,'plain'))
+        s.send_message(msg) #sending the actual email
+        del msg
+    
+    
+    
+        
+            
+    

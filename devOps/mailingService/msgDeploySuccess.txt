@@ -1,8 +1,0 @@
-Dear ${PERSON_NAME},
-
-Production Server - Deploy Success! 
-
-${TIME_OF_ERROR}
-
-Regards,
-Blue DevOps Team
