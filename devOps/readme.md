@@ -12,6 +12,9 @@ docker run --rm --name=webhook -w /app -p 8086:8086 -d webhook
 docker run -itd --name=webhook -v $pwd:/app/data/ -v /var/run/docker.sock:/var/run/docker.sock -w /app -p 8086:8086 webhook -f /app/data/billing/docker-compose.yaml up -d
 docker run -itd -v /var/run/docker.sock:/var/run/docker.sock -v $pwd:/app/data/ docker/compose:1.24.1 -f /app/data/billing/docker-compose.yaml up -d
 
+# Step:
+cd root directory
+docker-compose -f devOps/docker-compose.yml up -d
 
 # Create webhook service
 http://18.185.248.191:8086/webhook
