@@ -3,9 +3,9 @@ from string import Template
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import constants
 
-_mailAddress='dorzvulundeveleapbluedevops@gmail.com'
-_password='13578642'
+
 
 _timeOfEvent=datetime.now()
 
@@ -26,7 +26,7 @@ def readTemplate(filename):
 
 s = smtplib.SMTP(host='smtp.gmail.com', port=587)
 s.starttls()
-s.login(_mailAddress,_password)
+s.login(mailAddress,password)
 
 names, emails = getContacts('contacts.txt')
 # if fail - use Fail, if success - use Success

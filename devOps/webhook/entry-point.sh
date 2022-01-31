@@ -1,8 +1,8 @@
 #!/bin/sh
 
-python3 -m venv venv #why creating virtual enviroment inside a container?! it is already a controlled virtual enviroment !?
-source venv/bin/activate
-pip install flask #need to use requierments.txt! 
+# python3 -m venv venv #why creating virtual enviroment inside a container?! it is already a controlled virtual enviroment !?
+# source venv/bin/activate
+# pip install flask #need to use requierments.txt! 
 
 export FLASK_APP=main.py
 export FLASK_ENV=development

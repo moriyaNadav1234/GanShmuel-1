@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.7" #victor asked to update to 3.7 because of some issues with 3.8 he had
 
 services:
   ci:

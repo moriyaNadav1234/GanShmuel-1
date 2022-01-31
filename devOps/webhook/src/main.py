@@ -1,6 +1,11 @@
 from flask import Flask, request, json
-import app, process
+import process
 import subprocess
+from flask import Flask
+import constants
+
+app = Flask(__name__)
+
 
 @app.route("/webhook", methods=['POST'])
 def process():
@@ -17,3 +22,8 @@ def process():
     # commits = json.dumps(data['commits'])
 
     return data['ref']
+
+
+if __name__ == '__main__':
+    app.run(host=constants.HOST, port=constants.PORT , debug=constants.TEST)
+    #debug=True only in test. should be off in prod!
