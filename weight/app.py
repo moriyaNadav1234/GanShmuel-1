@@ -2,8 +2,9 @@ from flask import Flask ,request
 import mysql.connector
 from datetime import datetime
 
-app = Flask(__name__)
 
+
+app = Flask(__name__)
 
 @app.route('/health')
 def health():
@@ -56,8 +57,7 @@ def weight():
                 except:
                     return "invalid to time, please make sure to use the YYYY-MM-DD HH:MM:SS format"
             
-            #TODO: query to get all transactions by the vals from URL
-            #####mycursor.execute(f"SELECT * FROM transactions where direction = {filter} and datetime between {fromTime} and {toTime}")
+            mycursor.execute(f"SELECT * FROM transactions where direction = '{filter}' and datetime between '{fromTime}' and '{toTime}'")
             #TODO: itareate the query result into a arry of json object 
 
             #TODO: return the JSON objects
@@ -65,13 +65,12 @@ def weight():
     except:
         return "connection to database failed 500"
 
-    mycursor.execute("SELECT * FROM transactions")
+    #mycursor.execute(f"SELECT * FROM transactions where direction = '{filter}' and datetime between '{fromTime}' and '{toTime}'")
     myresult = mycursor.fetchall()
     y=[]
     for x in myresult:
         y.append(str(x))
-
-    return str(y) #TODO: test only use: return 'this is route weight'
+    return str(y[0]) #TODO: test only use: return 'this is route weight'
 
 @app.route('/')
 def hello():
@@ -79,4 +78,4 @@ def hello():
 
 
 if __name__=="__main__":
-    app.run(debug=True)
+    app.run()
