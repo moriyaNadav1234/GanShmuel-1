@@ -1,43 +1,117 @@
 from src import app
 from flask import request
+from enum import Enum
 import json
 import mysql.connector
 
 
-mydb = mysql.connector.connect(
-    host="billingDB",
-    user="root",
-    password="catty",
-    database="billdb"
-)
+class LOG_TYPE(Enum):
+    INFO=0
+    ERROR=1
+    WARNING=2
+
+type_desc = ["[INFO]","[ERROR]","[WARNING]"]
+
+def LOG(str,TYPE):
+    with open("log","a+") as f:
+        f.write(f'{type_desc[TYPE.value]} {str}\n')
+
+
+def connect():
+    mydb=None
+    LOG("Connecting to Database...",LOG_TYPE.INFO)
+    
+    try:
+        mydb = mysql.connector.connect(
+            host="billingDB",
+            user="root",
+            password="catty",
+            database="billdb"
+        )
+    except:
+        LOG("Connection failed!",LOG_TYPE.ERROR)
+        return None
+
+    LOG("Connection successful!",LOG_TYPE.INFO)
+    return mydb
 
 @app.route("/health")
-def index():
+def health():
     return "OK"
+
+@app.route("/db_health")
+def db_health():
+    return ("BAD" if connect() == None else "OK")
 
 @app.route('/provider',methods=['POST'])
 def Insert_provider():
-    mycursor = mydb.cursor()
-    #TODO: Error handling(Empty strings,invalid names and such)
-    sql = "INSERT INTO Provider (id,name) VALUES (%s,%s)"
-    val = ('9',request.form['name'])
-    mycursor.execute(sql, val)
 
-    mydb.commit()
+    if request.form['name'] == None or request.form['name'].isspace():
+        LOG("Invalid data provided! Cannot insert into Provider table",LOG_TYPE.ERROR)
+        return "BAD"
+    
+    #Open connection to the database
+    db = connect()
+    if db == None:
+        return "BAD"
 
-    return "record inserted"
+    LOG("Inserting into Provider table...",LOG_TYPE.INFO)
+
+    try:
+        mycursor = db.cursor()
+        #Query SQL
+        sql = 'INSERT INTO Provider(name) VALUES(%s)'
+        val = (request.form['name'],)
+        
+        mycursor.execute(sql,val)
+        db.commit()#Commit changes of the SQL Query
+
+        LOG("Inserted new record into Provider table",LOG_TYPE.INFO)
+
+        return json.dumps({'id':mycursor.lastrowid}), 200, {'ContentType':'application/json'}
+    except ValueError:
+        LOG("Failed to insert data into Provider Table",LOG_TYPE.ERROR)
+    finally:
+        LOG("Closing connection to database...",LOG_TYPE.INFO)
+        db.close()#Close connection
+
+    return "BAD"
+
 
 @app.route('/provider/<id>',methods=['PUT'])
 def Update_provider(id):
-    mycursor = mydb.cursor()
-    #TODO: Error handling(Empty strings,invalid names and such)
-    sql = "UPDATE Provider SET name=%s WHERE id=%s"
-    val = (request.form['name'],id)
 
-    mycursor.execute(sql,val)
-    mydb.commit()
-    return "OK"
+    if request.form['name'] == None or request.form['name'].isspace():
+        LOG("Invalid data provided! Cannot Update Provider table",LOG_TYPE.ERROR)
+        return "BAD"
+    
+    #Open connection to the database
+    db = connect()
+    if db == None:
+        return "BAD"
 
+    try:
+        mycursor = db.cursor()
+        
+        sql = "UPDATE Provider SET name=%s WHERE id=%s"
+        val = (request.form['name'],id)
+
+        mycursor.execute(sql,val)
+        db.commit()
+
+        LOG("Updated Provider table successfully!",LOG_TYPE.INFO)
+
+        return "OK"
+    except:
+        LOG("Failed to Update Provider table",LOG_TYPE.ERROR)
+        pass
+    finally:
+        LOG("Closing connection to database...",LOG_TYPE.INFO)
+        db.close()
+    
+    return "BAD"
+
+'''
 @app.route('/truck',methods=['POST'])
 def Insert_truck():
     mycursor = mydb.cursor()
@@ -48,3 +122,4 @@ def Insert_truck():
     mycursor.execute(sql,val)
     mydb.commit()
     return "OK"
+'''
