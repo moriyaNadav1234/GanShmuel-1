@@ -13,7 +13,7 @@ function get_code() {
   #git fetch --prune >> /app/test.log
   #git pull >> /app/test.log
 
-  docker-compose -f /data/billing/docker-compose.yml up
+  docker-compose -f ./data/billing/docker-compose.yml up
 }
 
 function testing() {

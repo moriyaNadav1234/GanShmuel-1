@@ -1,3 +1,4 @@
+#FROM docker/compose:1.24.1
 FROM docker/compose:alpine-1.29.2
 
 RUN apk add bash curl git
@@ -16,4 +17,6 @@ RUN chmod +x /usr/bin/entry-point.sh
 
 EXPOSE 8086
 
+#ENTRYPOINT ["sh" "/usr/local/bin/docker-compose-entrypoint.sh"]
 ENTRYPOINT [ "entry-point.sh" ]
+#CMD ["/bin/sh"]

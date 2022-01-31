@@ -11,7 +11,7 @@ services:
     tty: true
     working_dir: /app
     ports:
-      - "8080:8086"
+      - "8086:8086"
     volumes:
       - ../:/app/data/
-      - /var/run.docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
