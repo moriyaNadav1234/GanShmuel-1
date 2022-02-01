@@ -1,14 +1,19 @@
-import subprocess, os, datetime
-import constants
-from mailingService import mail_Service
-from git import Repo
+import os, subprocess
 
+from git import Repo
+from mailingService import mail_Service
+
+import constants
+
+# TODO: fix error
+# Error: While importing 'main', an ImportError was raised.
 
 def getCodeFromGitHub():
     # git clone git@github.com:develeapDorZ/GanShmuel.git
-    # if fail - notify devOps Team
     try:
-        Repo.clone(os.path.join(constants.gitHubURL, constants.deployDirectory))
+        #Repo.pull(os.path.join(constants.gitHubURL, constants.deployDirectory))
+        # pull -f --all - update the whole repo
+        subprocess.run("/app/GanShmuel/git pull -f --all", shell=True, check=True)
 
     except:
         mail_Service.sendErrorToLog('repo_log.txt', 'failed', 'repo update')
@@ -19,10 +24,6 @@ def getCodeFromGitHub():
 
 
 def dockerBuild_Weight():
-    # docker compose - weight
-    # if fail - fail email 
-    # if success - success email
-    # mail notificaiton for devOps & Teams
     try:
         subprocess.run("docker-compose -f /app/GanShmuel/billing/docker-compose.yml build", shell=True, check=True)
 
@@ -35,10 +36,6 @@ def dockerBuild_Weight():
 
 
 def dockerBuild_Billig():
-    # docker compose weight
-    # if fail- fail email
-    # if success - success email
-    # mail notificaiton for devOps & Billing Team
     try:
         subprocess.run("docker-compose -f /app/GanShmuel/weight/docker-compose.yml build", shell=True, check=True)
 
@@ -77,7 +74,6 @@ def productionDeploy_Weight():
 def testingDeploy_Billing():
     # TODO: run docker-compose for testing
     # docker-compose up -d >> /app/test.log
-    # DONE: mail notification accordingly
     try:
         subprocess.run("docker-compose -f /app/GanShmuel/billing/docker-compose.yml up", shell=True, check=True)
 

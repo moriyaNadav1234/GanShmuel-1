@@ -16,7 +16,4 @@ RUN chmod +x /usr/bin/entry-point.sh
 
 EXPOSE 8086
 
-#ENTRYPOINT ["sh" "/usr/local/bin/docker-compose-entrypoint.sh"]
-#CMD ["/bin/sh"]
-
-ENTRYPOINT [ "entry-point.sh" ]
+#ENTRYPOINT [ "entry-point.sh" ]
