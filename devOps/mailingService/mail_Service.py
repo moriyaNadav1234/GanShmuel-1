@@ -64,7 +64,7 @@ def mailNotification(proc, team, status ): #proc = build/deploy, team = mailingl
 
 def sendErrorToLog(filename, status, proc):
     with open(filename,mode='a', encoding='utf-8') as log_file:
-        loginput=f'{datetime.now()}: {proc} has {status.uppper()}\n'
+        loginput=f'{datetime.now()}: {proc} has {status.upper()}\n'
         log_file.write(loginput)
     
     
