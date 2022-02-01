@@ -19,9 +19,11 @@ def weight():
     try:
         #conncet to DB
         mydb = mysql.connector.connect(
-        host="weight_weightMySql_1",
+        host="weightMySql",        
         user="root",
-        password="1234"
+        port="3306",
+        password="1234",
+        database = "weight"
         )
         #used to send queries
         mycursor = mydb.cursor()
@@ -61,10 +63,13 @@ def weight():
 
     except:
         return "connection to database failed 500"
-
-    mycursor.execute("SELECT * FROM transactions")
+    
+    mycursor.execute("SELECT * FROM transactions where direction = '{From}' and datetime between '{From}' and '{To}'")
     myresult = mycursor.fetchall()
-    return myresult #TODO: test only use: return 'this is route weight'
+    y = []
+    for x in myresult:
+        y.append(x)
+    return y #TODO: test only use: return 'this is route weight'
 
 @app.route('/')
 def hello():
