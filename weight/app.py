@@ -20,6 +20,7 @@ def dbConnection():
 
 @app.route('/health')
 def health():
+    dbConnection()
     return 'ok 200',200
 
 @app.route('/item/<id>')
@@ -28,6 +29,8 @@ def item(id):
     From = "1st of month at 000000"
     To = "now"
     item=""
+
+    #making sure user specefied if he want's truck or container
     if request.args.get('item') =="truck" or request.args.get('item') =="container":
         item=request.args.get('item')
     else:
@@ -39,6 +42,7 @@ def item(id):
     if not request.args.get('to') == None and not request.args.get('to') =="":
         To=request.args.get('to')
 
+    #converting the string into date in the right format.
     if From=="1st of month at 000000":
         fromTime = datetime.now().strftime("%Y-%m-1 00:00:00")
     else:
@@ -46,7 +50,6 @@ def item(id):
             fromTime=datetime.strptime(From,"%Y-%m-%d %H:%M:%S")
         except:
             return "invalid from time, please make sure to use the YYYY-MM-DD HH:MM:SS format"
-
     if To=="now":
         toTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     else:
@@ -59,9 +62,12 @@ def item(id):
     mydb = dbConnection()
     #used to send queries
     mycursor = mydb.cursor()
+
+    #trenary condition based on if user is asking for container or a truck
     query = f"SELECT truck,truckTara,id FROM transactions where truck = '{id}' and datetime between '{fromTime}' and '{toTime}'" if item=="truck" else f"SELECT id FROM transactions where containers like '%{id}%'"
     mycursor.execute(query)
     queryresult = mycursor.fetchall()
+
     transactions=[]
     #iterating the results and converting them to json, appending then into a list
     if request.args.get('item') =="truck": 
@@ -119,28 +125,26 @@ def weight():
 
     if request.method == 'GET':
 
-            #fetch vals from url
+        #fetch vals from url
         if not request.args.get('from') == None and not request.args.get('from') =="":
                 From=request.args.get('from') 
         if not request.args.get('to') == None and not request.args.get('to') =="":
                 To=request.args.get('to') 
         if not request.args.get('filter') == None and not request.args.get('filter') =="":
                 filter=request.args.get('filter')
-            
+
+        #converting the string into date in the right format.    
         if From=="today at 000000":
             fromTime = datetime.now().strftime("%Y-%m-%d 00:00:00")
         else:
             try:
-                #TODO: make sure the from time have passed, if it's in the future cry.
                 fromTime=datetime.strptime(From,"%Y-%m-%d %H:%M:%S")
             except:
                 return "invalid from time, please make sure to use the YYYY-MM-DD HH:MM:SS format"
-
         if To=="now":
             toTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         else:
             try:
-                #TODO: make sure the from time have passed, if it's in the future cry.
                 toTime=datetime.strptime(To,"%Y-%m-%d %H:%M:%S")
             except:
                 return "invalid to time, please make sure to use the YYYY-MM-DD HH:MM:SS format"
@@ -163,35 +167,27 @@ def weight():
             return str(jsonList)
 
     else:
-        return "TODO POST"
+        return "TODO POST" #TODO: make post 
 
-    return "this is not working contact the local zoo for help" #TODO: test only use: return 'this is route weight'
+    return "this is not working, contact the local zoo for help" #TODO: test only use: return 'this is route weight'
 
 
     
 @app.route('/session/<id>')
 def session(id):
-    try:
-        #conncet to DB
-        mydb = mysql.connector.connect(
-        host="weightMySql",
-        port='3306',
-        database="weight",
-        user="root",
-        password="1234",
-        )
-    except:
-        return "connection to database failed 500"
-
+    
+    #connecting to DB
+    mydb = dbConnection()
     mycursor = mydb.cursor()
     mycursor.execute(f"SELECT truck,bruto,truckTara,neto FROM transactions where id = '{id}'")
     queryresult = mycursor.fetchall()
-    if queryresult == None:
-        return "404 non-existent"
+    
+    #if query is empty returning 404
+    if mycursor.rowcount == 0:
+        return "404 non-existent", 404
     else:
         jasonList=[]
         for row in queryresult:
-            #jasonList.append(row[0])
             jasonList.append(json.dumps({
             "id": id,
             "truck":row[0],
@@ -201,7 +197,7 @@ def session(id):
 
         return str(jasonList)
         
-
+#will hold front end if we'll make it on time, if you're from the future and read it in hope it'll help you, guess you'll die ¯\(ʘᗩʘ’)/¯
 @app.route('/')
 def home():
     return 'this will be a home page'
