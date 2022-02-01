@@ -33,3 +33,32 @@ def webhook():
 if __name__ == '__main__':
     app.run(host=constants.HOST, port=constants.PORT, debug=constants.TEST)
     # debug=True only in test. should be off in prod!
+
+
+def get_code():
+    print('getcode')
+
+
+def build():
+    print('build')
+
+
+def test():
+    print('test')
+
+
+def deploy():
+    print('deploy')
+
+
+def send_mail():
+    list_admin = ['admin@mydomain.com']
+    if not app.debug:
+        import logging
+        from logging.handlers import SMTPHandler
+        mail_handler = SMTPHandler(mailhost=('smtpout.secureserver.net', 25),
+                                   fromaddr='admin@mydomain.com',
+                                   toaddrs=list_admin, subject='YourApplication Failed',
+                                   credentials=('admin@mydomain.com', 'mypassword'))
+        mail_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(mail_handler)

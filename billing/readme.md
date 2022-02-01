@@ -1,1 +1,5 @@
-goodluck billing team
+# Example Tests
+```commandline
+pip install pytest
+
+```
