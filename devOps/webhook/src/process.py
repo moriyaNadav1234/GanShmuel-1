@@ -36,7 +36,7 @@ def getCodeFromGitHub():
 
 def dockerBuild_Weight():
     try:
-        subprocess.run("docker-compose -f /app/GanShmuel/weight/docker-compose.yml build", shell=True, check=True)
+        subprocess.run("docker-compose -f ./GanShmuel/weight/docker-compose.yml build", shell=True, check=True)
 
     except:
         sendErrorToLog('weight_team_log.txt', 'failed', 'build')
@@ -48,7 +48,7 @@ def dockerBuild_Weight():
 
 def dockerBuild_Billig():
     try:
-        subprocess.run("docker-compose -f /GanShmuel/billing/docker-compose.yml build", shell=True, check=True)
+        subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml build", shell=True, check=True)
 
     except:
         sendErrorToLog('billing_team_log.txt', 'failed', 'build')
@@ -60,7 +60,7 @@ def dockerBuild_Billig():
 
 def productionDeploy_Billing():
     try:
-        subprocess.run("docker-compose -f /GanShmuel/billing/docker-compose.yml up", shell=True, check=True)
+        subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml up -d", shell=True, check=True)
 
     except:
         sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
@@ -72,7 +72,7 @@ def productionDeploy_Billing():
 
 def productionDeploy_Weight():
     try:
-        subprocess.run("docker-compose -f /GanShmuel/weight/docker-compose.yml up", shell=True, check=True)
+        subprocess.run("docker-compose -f ./GanShmuel/weight/docker-compose.yml up -d", shell=True, check=True)
 
     except:
         sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
@@ -86,7 +86,7 @@ def testingDeploy_Billing():
     # TODO: run docker-compose for testing
     # docker-compose up -d >> /app/test.log
     try:
-        subprocess.run("docker-compose -f /GanShmuel/billing/docker-compose.yml up", shell=True, check=True)
+        subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml up -d", shell=True, check=True)
 
     except:
         sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
@@ -98,7 +98,7 @@ def testingDeploy_Billing():
 
 def productionDeploy_Weight():
     try:
-        subprocess.run("docker-compose -f /GanShmuel/weight/docker-compose.yml up", shell=True, check=True)
+        subprocess.run("docker-compose -f ./GanShmuel/weight/docker-compose.yml up -d", shell=True, check=True)
 
     except:
         sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
