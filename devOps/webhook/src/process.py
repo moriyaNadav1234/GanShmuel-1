@@ -1,8 +1,13 @@
-import subprocess, os, datetime
-import constants
-from mailingService import mail_Service
-from git import Repo
+import os
+import subprocess
 
+from git import Repo
+from mailingService import mail_Service
+
+import constants
+
+# TODO: fix error
+# Error: While importing 'main', an ImportError was raised.
 
 def getCodeFromGitHub():
     # git clone git@github.com:develeapDorZ/GanShmuel.git
@@ -20,7 +25,7 @@ def getCodeFromGitHub():
 
 def dockerBuild_Weight():
     # docker compose - weight
-    # if fail - fail email 
+    # if fail - fail email
     # if success - success email
     # mail notificaiton for devOps & Teams
     try:

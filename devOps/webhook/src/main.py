@@ -1,21 +1,27 @@
-from flask import Flask, request, json
-import process
-import subprocess
 from flask import Flask
+from flask import request, json
+
 import constants
+
+# TODO: fix error
+# Error: While importing 'main', an ImportError was raised.
+# import process
 
 app = Flask(__name__)
 
 
 @app.route("/webhook", methods=['POST'])
-def process():
+def webhook():
     data = json.loads(request.data)
 
-    process.getCodeFromGitHub()  # git clone
-    process.dockerBuild_Billig()
-    process.dockerBuild_Weight()
-    process.productionDeploy_Weight()
-    process.productionDeploy_Billing()
+    # TODO: fix error
+    # Error: While importing 'main', an ImportError was raised.
+
+    # process.getCodeFromGitHub()  # git clone
+    # process.dockerBuild_Billig()
+    # process.dockerBuild_Weight()
+    # process.productionDeploy_Weight()
+    # process.productionDeploy_Billing()
 
     # !!!main will call functions from process.py! this part will be depreciated.
     # Call bash script to process for git trigger
