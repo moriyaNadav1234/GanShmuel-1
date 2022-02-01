@@ -1,7 +1,7 @@
 import os, subprocess
 
-from git import Repo
-from mailingService import mail_Service
+# from git import Repo
+from devOps.mailingService.mail_Service import *
 
 import constants
 
@@ -16,11 +16,11 @@ def getCodeFromGitHub():
         subprocess.run("/app/GanShmuel/git pull -f --all", shell=True, check=True)
 
     except:
-        mail_Service.sendErrorToLog('repo_log.txt', 'failed', 'repo update')
-        mail_Service.mailNotification('updateRepo', 'devops', False)
+        sendErrorToLog('repo_log.txt', 'failed', 'repo update')
+        mailNotification('updateRepo', 'devops', False)
     else:
-        mail_Service.mailNotification('updateRepo', 'devops', True)
-        mail_Service.sendErrorToLog('repo_log.txt', 'success', 'repo update')
+        mailNotification('updateRepo', 'devops', True)
+        sendErrorToLog('repo_log.txt', 'success', 'repo update')
 
 
 def dockerBuild_Weight():
@@ -28,11 +28,11 @@ def dockerBuild_Weight():
         subprocess.run("docker-compose -f /app/GanShmuel/billing/docker-compose.yml build", shell=True, check=True)
 
     except:
-        mail_Service.sendErrorToLog('weight_team_log.txt', 'failed', 'build')
-        mail_Service.mailNotification('build', 'weight', False)
+        sendErrorToLog('weight_team_log.txt', 'failed', 'build')
+        mailNotification('build', 'weight', False)
     else:
-        mail_Service.mailNotification('build', 'weight', True)
-        mail_Service.sendErrorToLog('weight_team_log.txt', 'success', 'build')
+        mailNotification('build', 'weight', True)
+        sendErrorToLog('weight_team_log.txt', 'success', 'build')
 
 
 def dockerBuild_Billig():
@@ -40,11 +40,11 @@ def dockerBuild_Billig():
         subprocess.run("docker-compose -f /app/GanShmuel/weight/docker-compose.yml build", shell=True, check=True)
 
     except:
-        mail_Service.sendErrorToLog('billing_team_log.txt', 'failed', 'build')
-        mail_Service.mailNotification('build', 'billing', False)
+        sendErrorToLog('billing_team_log.txt', 'failed', 'build')
+        mailNotification('build', 'billing', False)
     else:
-        mail_Service.mailNotification('build', 'billing', True)
-        mail_Service.sendErrorToLog('billing_team_log.txt', 'success', 'build')
+        mailNotification('build', 'billing', True)
+        sendErrorToLog('billing_team_log.txt', 'success', 'build')
 
 
 def productionDeploy_Billing():
@@ -52,11 +52,11 @@ def productionDeploy_Billing():
         subprocess.run("docker-compose -f /app/GanShmuel/billing/docker-compose.yml up", shell=True, check=True)
 
     except:
-        mail_Service.sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
-        mail_Service.mailNotification('build', 'weight', False)
+        sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
+        mailNotification('build', 'weight', False)
     else:
-        mail_Service.mailNotification('build', 'weight', True)
-        mail_Service.sendErrorToLog('billing_team_log.txt', 'success', 'deploy')
+        mailNotification('build', 'weight', True)
+        sendErrorToLog('billing_team_log.txt', 'success', 'deploy')
 
 
 def productionDeploy_Weight():
@@ -64,11 +64,11 @@ def productionDeploy_Weight():
         subprocess.run("docker-compose -f /app/GanShmuel/weight/docker-compose.yml up", shell=True, check=True)
 
     except:
-        mail_Service.sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
-        mail_Service.mailNotification('deploy', 'weight', False)
+        sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
+        mailNotification('deploy', 'weight', False)
     else:
-        mail_Service.mailNotification('deploy', 'weight', True)
-        mail_Service.sendErrorToLog('weight_team_log.txt', 'success', 'deploy')
+        mailNotification('deploy', 'weight', True)
+        sendErrorToLog('weight_team_log.txt', 'success', 'deploy')
 
 
 def testingDeploy_Billing():
@@ -78,11 +78,11 @@ def testingDeploy_Billing():
         subprocess.run("docker-compose -f /app/GanShmuel/billing/docker-compose.yml up", shell=True, check=True)
 
     except:
-        mail_Service.sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
-        mail_Service.mailNotification('deploy', 'billing', False)
+        sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
+        mailNotification('deploy', 'billing', False)
     else:
-        mail_Service.mailNotification('deploy', 'billing', True)
-        mail_Service.sendErrorToLog('billing_team_log.txt', 'success', 'deploy')
+        mailNotification('deploy', 'billing', True)
+        sendErrorToLog('billing_team_log.txt', 'success', 'deploy')
 
 
 def productionDeploy_Weight():
@@ -90,8 +90,8 @@ def productionDeploy_Weight():
         subprocess.run("docker-compose -f /app/GanShmuel/weight/docker-compose.yml up", shell=True, check=True)
 
     except:
-        mail_Service.sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
-        mail_Service.mailNotification('deploy', 'weight', False)
+        sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
+        mailNotification('deploy', 'weight', False)
     else:
-        mail_Service.mailNotification('deploy', 'weight', True)
-        mail_Service.sendErrorToLog('weight_team_log.txt', 'success', 'deploy')
+        mailNotification('deploy', 'weight', True)
+        sendErrorToLog('weight_team_log.txt', 'success', 'deploy')
