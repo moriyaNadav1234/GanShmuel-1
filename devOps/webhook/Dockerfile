@@ -16,4 +16,4 @@ RUN chmod +x /usr/bin/entry-point.sh
 
 EXPOSE 8086
 
-#ENTRYPOINT [ "entry-point.sh" ]
+ENTRYPOINT [ "entry-point.sh" ]
