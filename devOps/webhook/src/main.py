@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request, json
-from devOps.webhook.src.process import *
+from process import *
 import constants
 
 # TODO: fix error
