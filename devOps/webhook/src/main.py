@@ -15,7 +15,7 @@ def webhook():
 
     # TODO: fix error
     # Error: While importing 'main', an ImportError was raised.
-
+    process.firstCopy()
     process.getCodeFromGitHub()  # git clone
     process.dockerBuild_Billig()
     process.dockerBuild_Weight()
@@ -30,9 +30,7 @@ def webhook():
     return data['ref']
 
 
-if __name__ == '__main__':
-    app.run(host=constants.HOST, port=constants.PORT, debug=constants.TEST)
-    # debug=True only in test. should be off in prod!
+
 
 
 def get_code():
@@ -62,3 +60,8 @@ def send_mail():
                                    credentials=('admin@mydomain.com', 'mypassword'))
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
+
+        
+if __name__ == '__main__':
+    app.run(host=constants.HOST, port=constants.PORT, debug=constants.TEST)
+    # debug=True only in test. should be off in prod!

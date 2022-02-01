@@ -8,6 +8,16 @@ import constants
 
 # TODO: fix error
 # Error: While importing 'main', an ImportError was raised.
+def firstCopy():
+    if  not os.path.isdir('GanShmuel'):
+        try:
+            subprocess.run("git clone https://github.com/develeapDorZ/GanShmuel", shell=True, check=True)
+        except:
+            sendErrorToLog('repo_log.txt', 'failed', 'repo creation')
+            mailNotification('updateRepo', 'devops', False)
+        else:
+            mailNotification('updateRepo', 'devops', True)
+            sendErrorToLog('repo_log.txt', 'success', 'repo creation')
 
 def getCodeFromGitHub():
     # git clone git@github.com:develeapDorZ/GanShmuel.git

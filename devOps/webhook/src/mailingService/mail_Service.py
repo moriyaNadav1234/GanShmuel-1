@@ -32,22 +32,20 @@ s.login(mailAddress,password)
     
 
 def mailNotification(proc, team, status ): #proc = build/deploy, team = mailinglist, status = success/fail
-    match team: # select mailing list
-        case 'billing': # B&DO
-            names, emails = _getContacts('Billing_DevOps_MailingList.txt')
+    if team == 'billing': # B&DO
+        names, emails = _getContacts('Billing_DevOps_MailingList.txt')
             
-        case 'weight': # W&DO
-            names, emails = _getContacts('Weight_DevOps_MailingList.txt')
+    if team == 'weight': # W&DO
+        names, emails = _getContacts('Weight_DevOps_MailingList.txt')
             
-        case 'devops': 
-            names, emails = _getContacts('DevOps_MailingList.txt')
+    if team ==  'devops': 
+        names, emails = _getContacts('DevOps_MailingList.txt')
     
-    match status: # select EMail Template
-        case True: 
+         # select EMail Template
+        if status:  
             message_template = _readTemplate('msgSuccess.txt')
             st = 'Success'
-        
-        case False : 
+        else:
             message_template = _readTemplate('msgFail.txt')
             st = 'Failed'
     
