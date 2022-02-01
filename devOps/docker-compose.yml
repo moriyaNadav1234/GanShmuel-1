@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: ci_server
     container_name: ci_server
-    restart: unless-stopped
+    # restart: unless-stopped commented out for debuging
     tty: true 
     working_dir: /app
     ports:

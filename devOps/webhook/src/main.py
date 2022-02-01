@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request, json
-from process import *
+import process
 import constants
 
 # TODO: fix error
@@ -16,11 +16,11 @@ def webhook():
     # TODO: fix error
     # Error: While importing 'main', an ImportError was raised.
 
-    getCodeFromGitHub()  # git clone
-    dockerBuild_Billig()
-    dockerBuild_Weight()
-    productionDeploy_Weight()
-    productionDeploy_Billing()
+    process.getCodeFromGitHub()  # git clone
+    process.dockerBuild_Billig()
+    process.dockerBuild_Weight()
+    process.productionDeploy_Weight()
+    process.productionDeploy_Billing()
 
     # !!!main will call functions from process.py! this part will be depreciated.
     # Call bash script to process for git trigger

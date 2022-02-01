@@ -4,9 +4,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from unittest import case
-import constants
+# from constants import mailAddress, password
 
 # TODO: DONE! create a function that will recive a maling list, success/fail, deploy/build and will build a mail accordingly. 
+
+mailAddress='dorzvulundeveleapbluedevops@gmail.com'
+password='13578642'
 
 # create 3 mailing lists - DevOps only, Billing+DevOps, Weight+DevOps
 def _getContacts(filename):
@@ -25,7 +28,7 @@ def _readTemplate(filename):
 
 s = smtplib.SMTP(host='smtp.gmail.com', port=587)
 s.starttls()
-s.login(constants.mailAddress,constants.password)
+s.login(mailAddress,password)
     
 
 def mailNotification(proc, team, status ): #proc = build/deploy, team = mailinglist, status = success/fail
@@ -55,7 +58,7 @@ def mailNotification(proc, team, status ): #proc = build/deploy, team = mailingl
     for name, email in zip(names, emails): #building the email msg object:
         msg = MIMEMultipart() # created the mail
         message = message_template.substitute(PERSON_NAME=name.title(), TIME_STAMP=timeOfEvent, PROCCESS=proc.upper()) #add the actual name to the template
-        msg['From']=constants.mailAddress
+        msg['From']=mailAddress
         msg['To']=email
         msg['Subject']=f'Important Update - {proc.upper()} proccess ${st.upper()}'
         msg.attach(MIMEText(message,'plain'))

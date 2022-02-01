@@ -1,7 +1,7 @@
 import os, subprocess
 
 # from git import Repo
-from mailingService.mail_Service import *
+from mailingService.mail_Service import sendErrorToLog, mailNotification
 
 import constants
 
