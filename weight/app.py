@@ -10,6 +10,36 @@ app = Flask(__name__)
 def health():
     return 'ok 200'
 
+
+@app.route('/unknown') 
+def unknown():
+    try:
+        #conncet to DB
+        mydb = mysql.connector.connect(
+        host="weightMySql",
+        port='3306',
+        database="weight",
+        user="root",
+        password="1234"
+        )
+
+        #used to send queries
+        mycursor = mydb.cursor()
+        mycursor.execute("SELECT container_id FROM containers_registered WHERE weight IS NULL")
+        queryres = mycursor.fetchall()
+        unknownList=[]
+        for row in queryres:
+            unknownList.append(str(row))
+
+        
+
+    except:
+        return "connection to database failed 500"
+    
+
+    return str(unknownList)
+
+
 @app.route('/weight',methods=['GET','POST'])
 def weight():
 
