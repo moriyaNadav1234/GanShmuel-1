@@ -46,7 +46,7 @@ def dockerBuild_Weight():
         sendErrorToLog('weight_team_log.txt', 'success', 'build')
 
 
-def dockerBuild_Billig():
+def dockerBuild_Billing():
     try:
         subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml build", shell=True, check=True)
 

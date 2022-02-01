@@ -6,8 +6,6 @@ from email.mime.text import MIMEText
 from unittest import case
 # from constants import mailAddress, password
 
-# TODO: DONE! create a function that will recive a maling list, success/fail, deploy/build and will build a mail accordingly. 
-
 mailAddress='dorzvulundeveleapbluedevops@gmail.com'
 password='13578642'
 
@@ -31,16 +29,18 @@ s.starttls()
 s.login(mailAddress,password)
     
 
-def mailNotification(proc, team, status ): #proc = build/deploy, team = mailinglist, status = success/fail
+def mailNotification(proc, team, status): #proc = build/deploy, team = mailinglist, status = success/fail
     if team == 'billing': # B&DO
         names, emails = _getContacts('./mailingService/Billing_DevOps_MailingList.txt')
             
     if team == 'weight': # W&DO
         names, emails = _getContacts('./mailingService/Weight_DevOps_MailingList.txt')
+
             
     if team ==  'devops': 
         names, emails = _getContacts('./mailingService/DevOps_MailingList.txt')
     
+
          # select EMail Template
         if status:  
             message_template = _readTemplate('./mailingService/msgSuccess.txt')
@@ -48,6 +48,7 @@ def mailNotification(proc, team, status ): #proc = build/deploy, team = mailingl
         else:
             message_template = _readTemplate('./mailingService/msgFail.txt')
             st = 'Failed'
+
     
     timeOfEvent=datetime.now() # simulated time of event 
     if proc == "updateRepo":
