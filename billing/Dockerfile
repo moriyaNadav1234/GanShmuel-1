@@ -5,4 +5,5 @@ COPY . /billing
 WORKDIR /billing
 RUN pip3 install -r requirements.txt
 RUN python -m pip install mysql-connector-python
+RUN python -m pip install openpyxl
 ENTRYPOINT [ "flask" , "run" ]

@@ -6,6 +6,7 @@ services:
     image: mysql:8.0
     volumes:
       - ./db:/docker-entrypoint-initdb.d
+      - mysql_db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: catty
     
@@ -13,3 +14,8 @@ services:
     build: .
     ports:
       - "5001:5000"
+    volumes:
+      - ./in:/in
+volumes:
+  mysql_db:
+    external: false

@@ -28,14 +28,13 @@ echo "==========================================="
 #API
 echo "=============API health===================="
 #When inserting we get an ID back, we use it after the tests to remove everything we inserted
-result=$( curl "$IP":"$PORT"/provider -F name='MilkCart' 2>/dev/null | grep "^BAD" )
+result=$( curl "$IP":"$PORT"/provider -F name='MilkCart' 2>/dev/null | cut -d ":" -f2 | sed -E "s/[\s}]//g" | sed -E "s/\s//g")
+provider_id="$result" #We get it from the previous test
 if [ "$result" != "BAD" ]; then
     echo -e "Inserting into Provider: ${GREEN}Successful${NC}"
 else
     echo -e "Inserting into Provider: ${RED}Failed${NC}"
 fi
-
-provider_id=10003 #We get it from the previous test, for now it's hard coded
 
 result=$( curl -X PUT "$IP":"$PORT"/provider/"$provider_id" -F name='Aliexp' 2>/dev/null | grep "^OK" )
 if [ "$result" = "OK" ]; then
@@ -57,3 +56,5 @@ if [ "$result" = "OK" ]; then
 else
     echo -e "Updating Trucks Provider ID: ${RED}Failed${NC}"
 fi
+
+#Reverting Test changes

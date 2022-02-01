@@ -1,5 +1,5 @@
 from src import app
-from flask import request
+from flask import request,send_file
 from enum import Enum
 import json
 import openpyxl
@@ -43,10 +43,6 @@ def connect():
 
     LOG("Connection successful!",LOG_TYPE.INFO)
     return mydb
-
-@app.route("/")
-def index():
-    return "Hello"
 
 @app.route("/health")
 def health():
@@ -128,25 +124,32 @@ def Update_provider(id):
 @app.route("/rates",methods=['POST'])
 def rates():
    data = request.form
-   rates = xlsx_to_array("in",data['filename'])
+   rates = xlsx_to_array("/in",data['filename'])
    db = connect()
    mycursor = db.cursor()
    for row in rates:
-        sql = 'SELECT * FROM Rates WHERE product_id = %s'
-        val = (row[0].value,)
-        mycursor.execute(sql,val)
-        myresult = mycursor.fetchall()
-        if len(myresult) == 0:
-              sql = 'insert into Rates (product_id,rate,scope) VALUES (%s,%s,%s)'
-              val = (row[0].value,row[1].value,row[2].value)
-        elif not row[2].value == 'ALL' :
-               sql = 'UPDATE Rates SET Rates.product_id = %(row0)s, Rates.rate = %(row1)s, Rates.scope = %(row2)s WHERE product_id = %(row0)s'
-               val = {'row0':row[0].value,
-                      'row1':row[1].value,
-                      'row2':row[2].value}
-        mycursor.execute(sql, val)
-        db.commit()
-   return "done"
+    print("HERE!")
+    sql = 'SELECT * FROM Rates WHERE product_id = %s AND scope = %s'
+    val = (row[0].value,row[2].value)
+    mycursor.execute(sql,val)
+    myresult = mycursor.fetchall()
+    if len(myresult) == 0:
+        sql = 'insert into Rates (product_id,rate,scope) VALUES (%s,%s,%s)'
+        val = (row[0].value,row[1].value,row[2].value)
+    else:
+        sql = 'UPDATE Rates SET rate = %(rate)s WHERE product_id = %(product_id)s AND scope = %(scope)s'
+        val = {'product_id':row[0].value,
+                'rate':row[1].value,
+                'scope':row[2].value}
+    mycursor.execute(sql, val)
+    db.commit()
+    db.close()
+
+    return "OK"
+
+@app.route('/rates',methods=['GET'])
+def Download_RatesXL():
+    return send_file("/in/rates.xlsx",as_attachment=True)
 
 @app.route('/truck',methods=['POST'])
 def Insert_truck():
