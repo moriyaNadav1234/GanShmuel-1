@@ -1,5 +1,5 @@
 from flask import Flask ,request
-import mysql.connector
+import mysql.connector, json
 from datetime import datetime
 
 
@@ -31,7 +31,6 @@ def weight():
         mycursor = mydb.cursor()
         if request.method=='GET':
             #fetch vals from url
-            #TODO: check if vals were sent ******************** TODO TODO
             if not request.args.get('from') == None and not request.args.get('from') =="":
                 From=request.args.get('from') 
             if not request.args.get('to') == None and not request.args.get('to') =="":
@@ -57,24 +56,49 @@ def weight():
                 except:
                     return "invalid to time, please make sure to use the YYYY-MM-DD HH:MM:SS format"
             
+            #query everything from the table
             mycursor.execute(f"SELECT * FROM transactions where direction = '{filter}' and datetime between '{fromTime}' and '{toTime}'")
-            #TODO: itareate the query result into a arry of json object 
+            queryresult = mycursor.fetchall()
+            jasonList=[]
+            #iterating the results and converting them to json, appending then into a list
+            for row in queryresult:
+                jasonList.append(json.dumps({"id":row[0],
+                "datetime":str(row[1]),
+                "direction":row[2],
+                "truck":row[3],
+                "containers":row[4],
+                "bruto":row[5],
+                "truckTara":row[6],
+                "neto":row[7],
+                "produce":row[8]}))
 
-            #TODO: return the JSON objects
+            #TODO: make sure if we have to return as a string :((((
+            return str(jasonList)
 
     except:
         return "connection to database failed 500"
 
-    #mycursor.execute(f"SELECT * FROM transactions where direction = '{filter}' and datetime between '{fromTime}' and '{toTime}'")
-    myresult = mycursor.fetchall()
-    y=[]
-    for x in myresult:
-        y.append(str(x))
-    return str(y[0]) #TODO: test only use: return 'this is route weight'
+    # mycursor.execute(f"SELECT * FROM transactions where direction = '{filter}' and datetime between '{fromTime}' and '{toTime}'")
+    # queryresult = mycursor.fetchall()
+    # jasonList=[]
+    # for row in queryresult:
+    #     jasonList.append(json.dumps({"id":row[0],
+    #     "datetime":str(row[1]),
+    #     "direction":row[2],
+    #     "truck":row[3],
+    #     "containers":row[4],
+    #     "bruto":row[5],
+    #     "truckTara":row[6],
+    #     "neto":row[7],
+    #     "produce":row[8]})) 
+    #y=list(myresult)
+    # for x in myresult:
+    #     y.append(str(x))
+    return "this is not working contact the local zoo for help" #TODO: test only use: return 'this is route weight'
 
 @app.route('/')
-def hello():
-    return 'Hello, World!'
+def home():
+    return 'this will be a home page'
 
 
 if __name__=="__main__":
