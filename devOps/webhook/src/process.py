@@ -24,7 +24,7 @@ def getCodeFromGitHub():
     try:
         #Repo.pull(os.path.join(constants.gitHubURL, constants.deployDirectory))
         # pull -f --all - update the whole repo
-        subprocess.run("/GanShmuel/git pull -f --all", shell=True, check=True)
+        subprocess.run("git -C GanShmuel pull -f --all", shell=True, check=True)#noticed this can cause conflicts problematic???  
 
     except:
         sendErrorToLog('repo_log.txt', 'failed', 'repo update')
