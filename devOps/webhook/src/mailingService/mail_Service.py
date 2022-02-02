@@ -9,7 +9,7 @@ from unittest import case
 
 mailAddress='dorzvulundeveleapbluedevops@gmail.com'
 password='13578642'
-
+message_template = []
 # create 3 mailing lists - DevOps only, Billing+DevOps, Weight+DevOps
 def _getContacts(filename):
     names = []
