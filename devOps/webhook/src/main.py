@@ -39,7 +39,7 @@ def webhook():
         process.dockerDeploy(branchName,'test')
         # if not success: return False
 
-        process.testingDeploy(branchName)
+        # process.testingDeploy(branchName)
         # if not success: return False
 
     elif branchName == "main":
