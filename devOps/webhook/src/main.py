@@ -17,7 +17,20 @@ def webhook():
     # Error: While importing 'main', an ImportError was raised.
     process.firstCopy()
     process.getCodeFromGitHub()  # git clone
+    #if branch not main do only test
+        #process.buildtest
+        #process.deploytest
+        #ans =test.runtest
+        #if ans ok send mail
+
+    #if branch main test and deploy
+        #process.buildtest
+        #process.deploytest
+        #ans =test.runtest
+        #if ans ok send mail
+        #if test ok deploy production
     process.dockerBuild_Billing() 
+    
     process.dockerBuild_Weight()
     process.productionDeploy_Weight() 
     process.productionDeploy_Billing()
