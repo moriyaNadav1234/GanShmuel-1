@@ -1,7 +1,35 @@
-version: "3.7"
+version: "3"
 
 services:
-  testweight_img:
-    build: .
-  # testweight_ct:
-  #     image: weight_testweight_img
+  flask_app:
+    build:
+     context: .
+     dockerfile: Dockerfile
+    ports:
+     - '5000:5000'
+    networks:
+     - backend
+    depends_on:
+     weightMySql:
+      condition: service_healthy
+
+  weightMySql:
+    image: mysql:5.7
+    environment:
+     MYSQL_ROOT_PASSWORD: '1234'
+     MYSQL_DATABASE: weight
+    volumes:
+     - $PWD/sqlFile:/docker-entrypoint-initdb.d/
+     - sqlData:/var/lib/mysql
+    networks:
+     - backend
+    healthcheck:
+     test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+     timeout: 20s
+     retries: 10
+
+volumes:
+ sqlData:
+
+networks:
+ backend:
