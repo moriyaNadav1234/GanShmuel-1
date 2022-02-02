@@ -1,3 +1,4 @@
+from ast import If
 from datetime import datetime
 from string import Template
 import smtplib
@@ -65,11 +66,10 @@ def mailNotification(proc, team, status): #proc = build/deploy, team = mailingli
         del msg
 
 def sendErrorToLog(filename, status, proc):
+    
+    filename = "./logs/"+filename
     with open(filename,mode='a', encoding='utf-8') as log_file:
         loginput=f'{datetime.now()}: {proc} has {status.upper()}\n'
         log_file.write(loginput)
-    
-    
-        
             
     
