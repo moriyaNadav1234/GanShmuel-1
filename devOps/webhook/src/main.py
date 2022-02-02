@@ -4,6 +4,16 @@ from constants import *
 
 app = Flask(__name__)
 
+
+@app.route('/',methods=['GET'])
+def index():
+    return render_template("index.html")
+
+@app.route('/monitoring', methods=['GET'])
+def get_message():
+    process.testingDeploy_Billing()
+    return {"billing":"Ok","weight":"err"}
+
 @app.route("/webhook", methods=['POST'])
 def webhook():
     data = json.loads(request.data) 
