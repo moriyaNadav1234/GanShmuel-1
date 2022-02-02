@@ -47,7 +47,7 @@ def getCodeFromGitHub(branchName):
 def dockerBuild(branchName):
 
     # remove image if already built
-    image = subprocess.run(f'docker image ls | grep {branchName}', shell=True, check=True)
+    image = str(subprocess.run(f'docker image ls | grep {branchName}', shell=True, check=True))
     imageName = image[0:image.find(" ")]
     if imageName.find(branchName) >= 0:
         subprocess.run(f'docker rmi {imageName}')
@@ -89,7 +89,7 @@ def testingDeploy(branchName):
     if branchName == 'weight':
         answers = testing.testWeight(path_weight)
     elif branchName == 'billing':
-        answers = testing.testWeight(path_billing)
+        answers = testing.testBilling(path_billing)
     elif branchName == 'main':
         answers = testing.testProduction(path_billing,path_weight)
 
