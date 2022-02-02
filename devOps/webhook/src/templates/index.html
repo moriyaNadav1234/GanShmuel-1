@@ -1,0 +1,56 @@
+<html>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+
+    function updateChat() {
+      $.get("/monitoring",function(data) {
+
+      var ok=document.createElement("span")
+      var err=document.createElement("span")
+      $(ok).append('<div> <b>Ok</b> <svg height="30" width="100"> <circle cx="50" cy="20" r="10" fill="green" /></svg></div>')
+      $(err).append('<div> <b>ERROR</b> <svg height="30" width="100"> <circle cx="50" cy="20" r="10" fill="red" /></svg></div>')
+          if(data.billing=="Ok")
+          $("td")[0].innerHTML+=ok.innerHTML
+        else 
+          $("td")[0].innerHTML+=err.innerHTML
+        if(data.weight=="Ok")
+          $("td")[1].innerHTML+=ok.innerHTML
+        else 
+          $("td")[1].innerHTML+=err.innerHTML
+          
+          
+        
+  
+        window.setTimeout(updateChat,1500);
+      })
+    }
+
+    $(document).ready(function() {
+      window.setTimeout(updateChat,1500);
+    });
+
+  </script>
+  <style>
+    table, th, td {
+     border:1px solid black;
+  }
+  </style>
+  <body>
+
+    <table style="width:100%">
+      <tr>
+        <th>testing billing</th>
+        <th>testing weight</th>
+
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+
+      </tr>
+    </table>
+    
+
+    
+  </body>
+</html>
