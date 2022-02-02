@@ -3,7 +3,7 @@ echo "#########################"
 echo "## deleting containers ##"
 echo "#########################"
 docker container rm -f $(docker container ps -a -q)
-docker image rm billing_testbilling_img
+docker rmi -f billing_testbilling_img
 
 docker-compose build
 echo "#########################"

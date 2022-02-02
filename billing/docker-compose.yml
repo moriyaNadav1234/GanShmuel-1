@@ -3,5 +3,5 @@ version: "3.7"
 services:
   testbilling_img:
     build: .
-  testbilling_ct:
-      image: billing_testbilling_img
+  # testbilling_ct:
+  #     image: billing_testbilling_img
