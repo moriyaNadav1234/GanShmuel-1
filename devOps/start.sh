@@ -2,6 +2,7 @@
 echo "#########################"
 echo "## deleting containers ##"
 echo "#########################"
+docker-compose down
 docker container rm -f "$(docker container ps -a -q)"
 docker rmi -f billing_testbilling_img
 
