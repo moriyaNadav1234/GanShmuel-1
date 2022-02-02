@@ -1,6 +1,8 @@
+from crypt import methods
 from flask import Flask ,request
 import mysql.connector, json
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
@@ -135,9 +137,45 @@ def session(id):
             "neto":row[3]}))
 
         return str(jasonList)
-        
 
-    #return "this is not working contact the local zoo for help" #TODO: test only use: return 'this is route weight'
+@app.route('/batch-weight',methods=['POST'])
+def batch():
+    try:
+        #conncet to DB
+        mydb = mysql.connector.connect(
+        host="weightMySql",
+        port='3306',
+        database="weight",
+        user="root",
+        password="1234",
+        )
+    except:
+        return "connection to database failed 500"        
+
+    if not request.args.get('file') == None and not request.args.get('file') =="":
+        file_name=request.args.get('file')
+        if not file_name.endswith('.csv') and not file_name.endswith('.json'):
+            return "please make sure the file type is csv or json"    
+    else:
+        return "please enter file name"
+
+    try:
+        script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+        rel_path = f"/home/mohamed/devweek/GanShmuel/weight/in/{file_name}"
+        abs_file_path = os.path.join(script_dir, rel_path)
+        with open(abs_file_path, 'r') as file:
+            data = file.read()
+            json_data = json.loads(data)
+    except: 
+        return f'/home/mohamed/devweek/GanShmuel/weight/in/{file_name}'
+        
+    mycursor = mydb.cursor()
+    query = "INSERT INTO containers (id,weight,unit) VALUES (%s,%s,%s) ; \n" 
+    for item in json_data:
+        mycursor.execute(query, [item['id'],item['weight'],item['unit']])
+    mydb.commit() 
+    return "inserted successfully"
+
 
 
 @app.route('/')
