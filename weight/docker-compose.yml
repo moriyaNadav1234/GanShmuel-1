@@ -1,7 +1,35 @@
 version: "3.7"
+
 services:
-  weight: 
-    build: . 
-  
+  flask_app:
+    container_name: ${APP_NAME}
+    build:
+     context: .
+     dockerfile: Dockerfile
+    ports:
+     - '${PORT}:5000'
+
+
   weightmysql:
-    build: .
+    image: mysql:5.7
+    container_name: ${DB_NAME}
+    environment:
+     MYSQL_ROOT_PASSWORD: '1234'
+     MYSQL_DATABASE: weight
+    volumes:
+     - $PWD/sqlFile:/docker-entrypoint-initdb.d/
+     - sqlData:/var/lib/mysql
+    networks:
+     - backend
+    healthcheck:
+     test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+     timeout: 20s
+     retries: 10
+
+volumes:
+  sqlData:
+    external: false
+
+networks:
+  backend:
+    driver: bridge
