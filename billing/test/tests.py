@@ -45,5 +45,5 @@ def test():
         except:
             test_results.append({"status":"err","reason":f'{reason} failed'})
 
-    print(test_results)
+    #print(test_results)
     return test_results
