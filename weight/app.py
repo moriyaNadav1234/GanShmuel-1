@@ -171,7 +171,28 @@ def weight():
             return str(jsonList)
 
     else:
-        return "TODO POST" #TODO: make post 
+        parms={"direction":None, #string in/out/None
+        "truck":None, #string
+        "containers":None, #list of string
+        "weight":None, #int =>0
+        "unit":None, #string
+        "force":None, #bool True/Flse
+        "produce":None} #string
+        
+        for i in request.args.items():
+            if not i[0] in parms:
+                return f"{i[0]} isn't a legal value, values you need to send are: direction,truck,containers,weight,unit,force,produce", 400
+            # if i[0]=="weight" and i[1]<0 or i[0]=="force" and not isinstance(i[1], bool) or i[0]=="direction" and not i[1]=="in" and not i[1]=="out":
+            #     return "make sure to insert into weight 0 or more, force to be True or False and direction to be in/out or keep it empty for None",400
+            
+            if not i[0]=="":
+                parms[i[0]]=i[1]
+            # else:
+            #    parms[i[0]]=None 
+
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        return str(parms) #TODO: make post 
 
     return "this is not working, contact the local zoo for help" #TODO: test only use: return 'this is route weight'
 
