@@ -1,0 +1,16 @@
+version: "3.7" #victor asked to update to 3.7 because of some issues with 3.8 he had
+
+services:
+  ci_server:
+    build:
+      context: ./webhook/
+      dockerfile: Dockerfile
+    image: ci_server
+    container_name: ci_server
+    # restart: unless-stopped commented out for debuging
+    tty: true 
+    working_dir: /app
+    ports:
+      - "8086:8086"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

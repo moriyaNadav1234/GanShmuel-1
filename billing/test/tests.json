@@ -1,0 +1,112 @@
+[
+    {
+        "api": "health",
+        "request_type": "GET",
+        "response_type": "body_response",
+        "parameters" : "None",
+        "result": "OK",
+        "description": "API health check"
+    },
+    {
+        "api": "db_health",
+        "request_type": "GET",
+        "response_type": "body_response",
+        "parameters" : "None",
+        "result": "OK",
+        "description": "Database health check"
+    },
+    {
+        "api": "provider",
+        "request_type": "POST",
+        "response_type": "status_code",
+        "parameters" : {"name":"Taraz"},
+        "result": 201,
+        "description": "Provider table insertion"
+    },
+
+
+
+
+
+
+
+
+
+
+
+    {
+        "api": "provider/10012",
+        "request_type": "PUT",
+        "response_type": "status_code",
+        "parameters" : {"name":"Karkal"},
+        "result": 200,
+        "description": "Provider table update"
+    },
+    {
+        "api": "provider/2",
+        "request_type": "PUT",
+        "response_type": "status_code",
+        "parameters" : {"name":"Marko"},
+        "result": 404,
+        "description": "Provider table update wrong id"
+    },
+    {
+        "api": "provider/2",
+        "request_type": "PUT",
+        "response_type": "status_code",
+        "parameters" : "None",
+        "result": 400,
+        "description": "Provider table update empty input"
+    },
+    {
+        "api": "provider/2",
+        "request_type": "PUT",
+        "response_type": "status_code",
+        "parameters" : "",
+        "result": 400,
+        "description": "Provider table update empty input"
+    },
+
+
+
+
+
+
+
+
+
+    {
+        "api": "rates",
+        "request_type": "POST",
+        "response_type": "status_code",
+        "parameters": "rates.xlsx",
+        "result": 201,
+        "description": "Uploading rates"
+    },
+
+
+
+
+
+
+
+
+    {
+        "api": "truck",
+        "request_type": "POST",
+        "response_type": "status_code",
+        "parameters": {"id":"32-441-51","provider_id":"10012"},
+        "result": 201,
+        "description": "Inserting Truck"
+    },
+
+    
+    {
+        "api": "truck/10012",
+        "request_type": "PUT",
+        "response_type": "status_code",
+        "parameters": {"provider_id":"10013"},
+        "result": 200,
+        "description": "Updating Truck"
+    }
+]

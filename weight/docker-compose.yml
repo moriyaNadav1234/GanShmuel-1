@@ -1,0 +1,7 @@
+version: "3.7"
+
+services:
+  testweight_img:
+    build: .
+  # testweight_ct:
+  #     image: weight_testweight_img

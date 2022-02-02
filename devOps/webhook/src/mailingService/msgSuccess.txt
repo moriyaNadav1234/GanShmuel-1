@@ -1,0 +1,8 @@
+Dear ${PERSON_NAME},
+
+Production Server - ${PROCCESS} process finished successfully! 
+
+Time of event: ${TIME_STAMP}
+
+Regards,
+Blue DevOps Team
