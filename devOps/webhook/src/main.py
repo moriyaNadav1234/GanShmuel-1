@@ -48,22 +48,21 @@ def webhook():
         process.dockerBuild("weight")
         # if not success: return False
 
+        # build, deploy and test billing
+        process.dockerBuild("billing")
+        # if not success: return False
+        
         #process.dockerDeploy("weight",'test')
+        # if not success: return False
+        
+        # process.dockerDeploy("billing",'test')
         # if not success: return False
 
         # process.testingDeploy("weight")
         # if not success: return False
 
-        # build, deploy and test billing
-        process.dockerBuild("billing")
-        # if not success: return False
-
-        # process.dockerDeploy("billing",'test')
-        # if not success: return False
-
         # process.testingDeploy("billing")
         # if not success: return False
-
 
         # deploy to production
         process.dockerDeploy("weight",'production')

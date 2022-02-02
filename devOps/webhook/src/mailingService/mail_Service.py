@@ -33,6 +33,8 @@ s.login(mailAddress,password)
 
 def mailNotification(proc, team, status): #proc = build/deploy, team = mailinglist, status = success/fail
     message_template = []
+    names = []
+    emails = [] 
     
     if team == 'billing': # B&DO
         names, emails = _getContacts('./mailingService/Billing_DevOps_MailingList.txt')
