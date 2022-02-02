@@ -12,7 +12,7 @@ def firstCopy():
     if  not os.path.isdir('GanShmuel'):
         try:
             subprocess.run("git clone https://github.com/develeapDorZ/GanShmuel", shell=True, check=True)
-            subprocess.run("git -C GanShmuel checkout DevOps", shell=True, check=True)
+            # Just for testing DevOps junk!!! subprocess.run("git -C GanShmuel checkout DevOps", shell=True, check=True) 
         except:
             sendErrorToLog('repo_log.txt', 'failed', 'repo creation')
             mailNotification('updateRepo', 'devops', False)
