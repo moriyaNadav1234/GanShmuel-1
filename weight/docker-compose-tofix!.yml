@@ -10,7 +10,7 @@ services:
      - '${PORT}:5000'
 
 
-  weightMySql:
+  weightmysql:
     image: mysql:5.7
     container_name: ${DB_NAME}
     environment:

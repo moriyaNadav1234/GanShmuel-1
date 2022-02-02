@@ -28,13 +28,15 @@ def firstCopy():
 
 def getCodeFromGitHub(branchName):
     # git clone git@github.com:develeapDorZ/GanShmuel.git
+    branchName=branchName.lower()
     try:
         #Repo.pull(os.path.join(constants.gitHubURL, constants.deployDirectory))
         # pull -f --all - update the whole repo
         subprocess.run("git -C GanShmuel pull -f --all", shell=True, check=True) #noticed this can cause conflicts problematic???  
-        if branchName == "DevOps":
-            branchName="devOps"
-            subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml down')
+        if branchName == "devops":
+            pass #figure out how to update CI_SERVER
+            # branchName="devOps"
+            # subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml down')
         else: 
             subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} down', shell=True, check=True)
         
