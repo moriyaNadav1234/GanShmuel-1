@@ -75,7 +75,11 @@ def dockerBuild(branchName):
 
 def dockerDeploy(branchName, env):
     try:
-        subprocess.run(f"docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} up -d", shell=True, check=True)
+        if env == "test":
+            subprocess.run(f"docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} -p {branchName}_test up -d", shell=True, check=True)
+        
+        else:
+            subprocess.run(f"docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} up -d", shell=True, check=True)
 
     except:
         sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'deploy')
