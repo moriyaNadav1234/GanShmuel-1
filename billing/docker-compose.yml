@@ -9,7 +9,7 @@ services:
       - mysql_db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: catty
-    
+
   api:
     build: .
     ports:

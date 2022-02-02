@@ -1,0 +1,35 @@
+[{ "id": "333-33-333",
+    "direction": "out",
+    "bruto": 292,
+    "neto": 250, 
+    "produce": "Tomatoes",
+    "containers": [ "C-35434", "T-33411", "K-34141" ]
+ },{
+    "id": "141-32-444",
+    "direction": "out",
+    "bruto": 132,
+    "neto": 280, 
+    "produce": "Blood",
+    "containers": [ "C-81185", "C-47634", "C-66667" ]
+ },{
+    "id": "141-32-444",
+    "direction": "out",
+    "bruto": 480,
+    "neto": 370, 
+    "produce": "Mandarin",
+    "containers": [ "C-81185", "C-47634", "C-66667" ]
+ },{
+    "id": "141-32-444",
+    "direction": "out",
+    "bruto": 513,
+    "neto": 480, 
+    "produce": "Navel",
+    "containers": [ "C-81185", "C-47634", "C-66667","K-34291" ]
+ },{
+    "id": "141-32-444",
+    "direction": "out",
+    "bruto": 601,
+    "neto": 550, 
+    "produce": "Navel",
+    "containers": [ "C-69185", "T-45534", "C-69420","K-34291" ]
+ }]
