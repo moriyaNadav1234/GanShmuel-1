@@ -15,7 +15,7 @@ def webhook():
     # if not success: return False
 
     if not firstCopy:
-        process.getCodeFromGitHub()  # git clone
+        process.getCodeFromGitHub(branchName)  # git clone
         # if not success: return False
     
     if branchName == 'biling': 
