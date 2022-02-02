@@ -5,4 +5,3 @@ services:
     build: .
   testbilling_ct:
       image: testbilling_img
-  
