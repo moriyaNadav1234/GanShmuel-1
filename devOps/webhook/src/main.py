@@ -3,18 +3,12 @@ from flask import request, json
 import process
 import constants
 
-# TODO: fix error
-# Error: While importing 'main', an ImportError was raised.
-# import process
-
 app = Flask(__name__)
 
 @app.route("/webhook", methods=['POST'])
 def webhook():
     data = json.loads(request.data) 
     
-    # TODO: fix error
-    # Error: While importing 'main', an ImportError was raised.
     process.firstCopy()
     process.getCodeFromGitHub()  # git clone
     process.dockerBuild_Billing() 
@@ -30,36 +24,33 @@ def webhook():
     return data['ref']
 
 
+# def get_code():
+#     print('getcode')
 
 
-
-def get_code():
-    print('getcode')
-
-
-def build():
-    print('build')
+# def build():
+#     print('build')
 
 
-def test():
-    print('test')
+# def test():
+#     print('test')
 
 
-def deploy():
-    print('deploy')
+# def deploy():
+#     print('deploy')
 
 
-def send_mail():
-    list_admin = ['admin@mydomain.com']
-    if not app.debug:
-        import logging
-        from logging.handlers import SMTPHandler
-        mail_handler = SMTPHandler(mailhost=('smtpout.secureserver.net', 25),
-                                   fromaddr='admin@mydomain.com',
-                                   toaddrs=list_admin, subject='YourApplication Failed',
-                                   credentials=('admin@mydomain.com', 'mypassword'))
-        mail_handler.setLevel(logging.ERROR)
-        app.logger.addHandler(mail_handler)
+# def send_mail():
+#     list_admin = ['admin@mydomain.com']
+#     if not app.debug:
+#         import logging
+#         from logging.handlers import SMTPHandler
+#         mail_handler = SMTPHandler(mailhost=('smtpout.secureserver.net', 25),
+#                                    fromaddr='admin@mydomain.com',
+#                                    toaddrs=list_admin, subject='YourApplication Failed',
+#                                    credentials=('admin@mydomain.com', 'mypassword'))
+#         mail_handler.setLevel(logging.ERROR)
+#         app.logger.addHandler(mail_handler)
 
         
 if __name__ == '__main__':
