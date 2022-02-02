@@ -43,3 +43,4 @@ Once this script is ran it'll download all that's required to run the service wi
 cur 0.0.0.0:5001/provider -F name="Mike"
 ```
 Some of the apis are still not working very well. Those bugs will be fixed by us as a team :)
+# sharef is Number1
