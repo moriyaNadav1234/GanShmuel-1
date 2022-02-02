@@ -99,8 +99,9 @@ def testingDeploy(branchName):
 
     success = True
     for ans in answers:
-        if ans.status != 'ok':
-            success = False
+        for obj in ans:
+            if ans.status != 'ok':
+                success = False
 
     if not success:
         sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'test')
