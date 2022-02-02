@@ -23,7 +23,7 @@ def webhook():
 
     if branchName == "billing" or branchName == "weight":
 
-        # process.dockerBuild(branchName)
+        process.dockerBuild(branchName)
         # if not success: return False
 
         process.dockerDeploy(branchName,'test')
