@@ -10,6 +10,7 @@ from unittest import case
 mailAddress='dorzvulundeveleapbluedevops@gmail.com'
 password='13578642'
 
+
 # create 3 mailing lists - DevOps only, Billing+DevOps, Weight+DevOps
 def _getContacts(filename):
     names = []
@@ -31,24 +32,24 @@ s.login(mailAddress,password)
     
 
 def mailNotification(proc, team, status): #proc = build/deploy, team = mailinglist, status = success/fail
+    message_template = []
+    
     if team == 'billing': # B&DO
         names, emails = _getContacts('./mailingService/Billing_DevOps_MailingList.txt')
             
     if team == 'weight': # W&DO
         names, emails = _getContacts('./mailingService/Weight_DevOps_MailingList.txt')
 
-            
     if team ==  'devops': 
         names, emails = _getContacts('./mailingService/DevOps_MailingList.txt')
-    
-
+            
          # select EMail Template
-        if status:  
-            message_template = _readTemplate('./mailingService/msgSuccess.txt')
-            st = 'Success'
-        else:
-            message_template = _readTemplate('./mailingService/msgFail.txt')
-            st = 'Failed'
+    if status:  
+        message_template = _readTemplate('./mailingService/msgSuccess.txt')
+        st = 'Success'
+    else:
+        message_template = _readTemplate('./mailingService/msgFail.txt')
+        st = 'Failed'
 
     
     timeOfEvent=datetime.now() # simulated time of event 

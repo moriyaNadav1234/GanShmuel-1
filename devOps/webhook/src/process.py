@@ -12,7 +12,7 @@ def firstCopy():
     if  not os.path.isdir('GanShmuel'):
         try:
             subprocess.run("git clone https://github.com/develeapDorZ/GanShmuel", shell=True, check=True)
-            subprocess.run("git -C GanShmuel checkout DevOps", shell=True, check=True)
+            # Just for testing DevOps junk!!! subprocess.run("git -C GanShmuel checkout DevOps", shell=True, check=True) 
         except:
             sendErrorToLog('repo_log.txt', 'failed', 'repo creation')
             mailNotification('updateRepo', 'devops', False)
@@ -47,13 +47,13 @@ def getCodeFromGitHub(branchName):
 def dockerBuild(branchName):
 
     # remove image if already built
-    image = str(subprocess.run(f'docker image ls | grep {branchName}', shell=True, check=True))
-    imageName = image[0:image.find(" ")]
-    if imageName.find(branchName) >= 0:
-        subprocess.run(f'docker rmi {imageName}')
+    # image = str(subprocess.run(f'docker image ls | grep {branchName}', shell=True, check=True))
+    # imageName = image[0:image.find(" ")]
+    # if imageName.find(branchName) >= 0:
+    #     subprocess.run(f'docker rmi {imageName}')
 
     try:
-        subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml build', shell=True, check=True)
+        subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} build', shell=True, check=True)
 
     except:
         sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'build')
@@ -68,7 +68,7 @@ def dockerBuild(branchName):
 
 def dockerDeploy(branchName, env):
     try:
-        subprocess.run(f"docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml up -d", shell=True, check=True)
+        subprocess.run(f"docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} up", shell=True, check=True)
 
     except:
         sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'deploy')
@@ -82,8 +82,8 @@ def dockerDeploy(branchName, env):
 
 
 def testingDeploy(branchName):
-    path_weight = './GanShmuel/weight/app/test/'
-    path_billing = './GanShmuel/billing/app/test/'
+    path_weight = './GanShmuel/weight/test/'
+    path_billing = './GanShmuel/billing/test/'
 
     answers = []
     if branchName == 'weight':
@@ -113,11 +113,13 @@ def testingDeploy(branchName):
 
 
 def terminateContainer():
+    pass
+    # dosen't kill - problem with names of CTs
     # ---- WHat are the containers names defined by the teams
-    if subprocess.run('docker ps | grep "testbilling_ct"') == "testbilling_ct":
-        subprocess.run("docker-compose testbilling_ct down")
-    if subprocess.run('docker ps | grep "testweight_ct"') == "testweight_ct":
-        subprocess.run("docker-compose testweight_ct down")
+    # if subprocess.run('docker ps | grep "testbilling_ct"') == "testbilling_ct":
+    #     subprocess.run("docker-compose testbilling_ct down")
+    # if subprocess.run('docker ps | grep "testweight_ct"') == "testweight_ct":
+    #     subprocess.run("docker-compose testweight_ct down")
     
 
 # def dockerBuild_Billing():
