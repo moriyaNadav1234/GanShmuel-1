@@ -1,0 +1,6 @@
+log
+readme.md
+test/
+db
+__pycache__
+src/__pycache__
