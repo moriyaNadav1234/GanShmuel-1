@@ -53,7 +53,7 @@ def dockerBuild(branchName):
     #     subprocess.run(f'docker rmi {imageName}')
 
     try:
-        subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file .env_production_{branchName} build', shell=True, check=True)
+        subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} build', shell=True, check=True)
 
     except:
         sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'build')
@@ -68,7 +68,7 @@ def dockerBuild(branchName):
 
 def dockerDeploy(branchName, env):
     try:
-        subprocess.run(f"docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file .env_production_{branchName} up", shell=True, check=True)
+        subprocess.run(f"docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} up", shell=True, check=True)
 
     except:
         sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'deploy')
