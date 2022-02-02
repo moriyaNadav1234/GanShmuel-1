@@ -1,11 +1,13 @@
 from src import app
-from flask import request,send_file
+from flask import request,send_file,Response
 from enum import Enum
 import json
 import openpyxl
 from pathlib import Path
 import mysql.connector
 import requests
+import xlwt
+import io
 
 
 class LOG_TYPE(Enum):
@@ -79,7 +81,7 @@ def Insert_provider():
 
         LOG("Inserted new record into Provider table",LOG_TYPE.INFO)
 
-        return json.dumps({'id':mycursor.lastrowid}), 200, {'Content-Type':'application/json'}
+        return json.dumps({'id':mycursor.lastrowid}), 201, {'Content-Type':'application/json'}
     except ValueError:
         LOG("Failed to insert data into Provider Table",LOG_TYPE.ERROR)
     finally:
@@ -91,19 +93,30 @@ def Insert_provider():
 
 @app.route('/provider/<id>',methods=['PUT'])
 def Update_provider(id):
-
-    if request.form['name'] == None or len(request.form['name']) == 0:
+    data = request.form['name']
+    
+    if len(request.form['name']) == 0:
         LOG("Invalid data provided! Cannot Update Provider table",LOG_TYPE.ERROR)
-        return "BAD"
+        return "BAD",400
     
     #Open connection to the database
     db = connect()
     if db == None:
-        return "BAD"
+        return "Database connection failed",500
 
     try:
         mycursor = db.cursor()
         
+        sql = "SELECT * FROM Provider WHERE id=%s"
+        val = (id,)
+
+        mycursor.execute(sql,val)
+        
+        if len(mycursor.fetchall()) == 0:
+            #TODO Add log here
+            return "Provider not found",404
+
+
         sql = "UPDATE Provider SET name=%s WHERE id=%s"
         val = (request.form['name'],id)
 
@@ -129,7 +142,6 @@ def rates():
    db = connect()
    mycursor = db.cursor()
    for row in rates:
-    print("HERE!")
     sql = 'SELECT * FROM Rates WHERE product_id = %s AND scope = %s'
     val = (row[0].value,row[2].value)
     mycursor.execute(sql,val)
@@ -146,11 +158,41 @@ def rates():
     db.commit()
     db.close()
 
-    return "OK"
+    return "OK",201
 
 @app.route('/rates',methods=['GET'])
 def Download_RatesXL():
-    return send_file("/in/rates.xlsx",as_attachment=True)
+    db = connect()
+    if db == None:
+        return "BAD"
+
+    mycursor = db.cursor()
+    mycursor.execute('SELECT * FROM Rates')
+    myresult = mycursor.fetchall()
+
+    #output in bytes
+    output = io.BytesIO()
+    #create WorkBook object
+    workbook = xlwt.Workbook()
+    #add a sheet
+    sh = workbook.add_sheet('rates')
+
+    #add headers
+    sh.write(0, 0, 'product_id')
+    sh.write(0, 1, 'rate')
+    sh.write(0, 2, 'scope')
+
+    idx = 0
+    for row in myresult:
+        sh.write(idx+1, 0, str(row[0]))
+        sh.write(idx+1, 1, row[1])
+        sh.write(idx+1, 2, str(row[2]))
+        idx += 1
+
+    workbook.save(output)
+    output.seek(0) 
+
+    return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=rates-new.xls"}) 
 
 @app.route('/truck',methods=['POST'])
 def Insert_truck():
@@ -170,7 +212,7 @@ def Insert_truck():
 
         LOG("Inserted new record into Trucks table successfully!",LOG_TYPE.INFO)
 
-        return "OK"
+        return "OK",201
     except:
         LOG("Failed to insert new record into Trucks table",LOG_TYPE.ERROR)
         pass
@@ -229,7 +271,6 @@ def Get_Truck(id):
     mycursor.execute(sql_query,val)
     results = mycursor.fetchall()
     
-    print(f'Result: {results}')
     LOG(f'{results}',LOG_TYPE.INFO)
 
     #TODO Perform check to see if it's found
@@ -280,12 +321,12 @@ def Get_Bill(id):
     truckCount = len(result_arr)
 
     #We expect to get a json array for all trucks that went out
-    weighted_containers = json.loads(requests.get("http://localhost:5000/weight",{'t1':date_from,'t2':date_to,'filter':'out'}).content)
+    weighted_containers = json.loads(requests.get("http://localhost:5000/weight",{'from':date_from,'to':date_to,'filter':'out'}).content)
 
     #TODO Number of sessions for each product
     #TODO Get total weight of each product
     providers_sessions = []
-    LOG(result_arr[0],LOG_TYPE.INFO)
+
     #Get all sessions that are specific to this provider
     for truck in weighted_containers:
         for truck_id in result_arr[0]:

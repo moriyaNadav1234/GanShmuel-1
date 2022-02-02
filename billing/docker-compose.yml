@@ -4,18 +4,21 @@ services:
 
   billingDB:
     image: mysql:8.0
+    container_name: ${DB_NAME}
     volumes:
       - ./db:/docker-entrypoint-initdb.d
-      - mysql_db:/var/lib/mysql
+      - ${VOLUME_DATA}:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: catty
 
   api:
     build: .
+    container_name: ${APP_NAME}
     ports:
-      - "5001:5000"
+      - "${PORT}:5000"
     volumes:
       - ./in:/in
+
 volumes:
   mysql_db:
     external: false
