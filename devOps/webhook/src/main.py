@@ -12,13 +12,14 @@ def webhook():
     branchName = data['ref'].split("/")[-1]
 
     success, firstCopy = process.firstCopy()
-    if not success: return False
+    # if not success: return False
 
     if not firstCopy:
         process.getCodeFromGitHub()  # git clone
-        if not success: return False
+        # if not success: return False
     
-    if branchName == 'biling': branchName = 'billing' # location == branch (branch name fix)
+    if branchName == 'biling': 
+        branchName = 'billing' # location == branch (branch name fix)
 
     if branchName == "billing" or branchName == "weight":
 
@@ -26,40 +27,40 @@ def webhook():
         # if not success: return False
 
         process.dockerDeploy(branchName,'test')
-        if not success: return False
+        # if not success: return False
 
         process.testingDeploy(branchName)
-        if not success: return False
+        # if not success: return False
 
     elif branchName == "main":
 
-        # # build, deploy and test weight
-        # process.dockerBuild("weight")
+        # build, deploy and test weight
+        process.dockerBuild("weight")
         # if not success: return False
 
         process.dockerDeploy("weight",'test')
-        if not success: return False
+        # if not success: return False
 
         process.testingDeploy("weight")
-        if not success: return False
+        # if not success: return False
 
-        # # build, deploy and test billing
-        # process.dockerBuild("billing")
+        # build, deploy and test billing
+        process.dockerBuild("billing")
         # if not success: return False
 
         process.dockerDeploy("billing",'test')
-        if not success: return False
+        # if not success: return False
 
         process.testingDeploy("billing")
-        if not success: return False
+        # if not success: return False
 
 
         # deploy to production
         process.dockerDeploy("weight",'production')
-        if not success: return False
+        # if not success: return False
         
         process.dockerDeploy("billing",'production')
-        if not success: return False
+        # if not success: return False
 
     return data['ref']
 
