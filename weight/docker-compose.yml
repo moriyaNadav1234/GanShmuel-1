@@ -4,4 +4,4 @@ services:
   testweight_img:
     build: .
   testweight_ct:
-      image: testweight_img
+      image: weight_testweight_img

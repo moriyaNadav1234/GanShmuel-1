@@ -4,5 +4,4 @@ services:
   testbilling_img:
     build: .
   testbilling_ct:
-      image: testbilling_img
-  
+      image: billing_testbilling_img
