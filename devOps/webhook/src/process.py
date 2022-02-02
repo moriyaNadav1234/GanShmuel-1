@@ -113,11 +113,13 @@ def testingDeploy(branchName):
 
 
 def terminateContainer():
+    pass
+    # dosen't kill - problem with names of CTs
     # ---- WHat are the containers names defined by the teams
-    if subprocess.run('docker ps | grep "testbilling_ct"') == "testbilling_ct":
-        subprocess.run("docker-compose testbilling_ct down")
-    if subprocess.run('docker ps | grep "testweight_ct"') == "testweight_ct":
-        subprocess.run("docker-compose testweight_ct down")
+    # if subprocess.run('docker ps | grep "testbilling_ct"') == "testbilling_ct":
+    #     subprocess.run("docker-compose testbilling_ct down")
+    # if subprocess.run('docker ps | grep "testweight_ct"') == "testweight_ct":
+    #     subprocess.run("docker-compose testweight_ct down")
     
 
 # def dockerBuild_Billing():
