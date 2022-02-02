@@ -21,7 +21,7 @@ def dbConnection():
 @app.route('/health')
 def health():
     dbConnection()
-    return 'ok 200',200
+    return 'OK'
 
 @app.route('/item/<id>')
 def item(id):
