@@ -1,4 +1,4 @@
-from flask import Flask, request, json
+from flask import Flask, request, json, render_template
 import process
 from constants import *
 
@@ -11,7 +11,7 @@ def index():
 
 @app.route('/monitoring', methods=['GET'])
 def get_message():
-    process.testingDeploy_Billing()
+    # process.testingDeploy_Billing()
     return {"billing":"Ok","weight":"err"}
 
 @app.route("/webhook", methods=['POST'])
