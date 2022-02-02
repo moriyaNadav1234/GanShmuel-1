@@ -91,9 +91,13 @@ def testingDeploy_Billing():
     except:
         sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
         mailNotification('deploy', 'billing', False)
+        print("errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+        return "err"
     else:
         mailNotification('deploy', 'billing', True)
         sendErrorToLog('billing_team_log.txt', 'success', 'deploy')
+        print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+        return "Ok"
 
 
 def productionDeploy_Weight():
