@@ -31,7 +31,7 @@ def webhook():
     if branchName == 'biling': 
         branchName = 'billing' # location == branch (branch name fix)
 
-    if branchName == "billing" or branchName == "weight":
+    if branchName == "billing" or branchName == "weight" or branchName == "DevOps":
 
         process.dockerBuild(branchName)
         # if not success: return False
