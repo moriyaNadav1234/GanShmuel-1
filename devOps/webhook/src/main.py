@@ -8,13 +8,34 @@ app = Flask(__name__)
 def webhook():
     data = json.loads(request.data) 
     
-    process.firstCopy()
-    process.getCodeFromGitHub()  # git clone
+    # fetch branch name form data['ref']
+    branchName = data['ref'].split("/")[-1]
+
+    success, firstCopy = process.firstCopy()
+    if not success: return False
+
+    if not firstCopy:
+        process.getCodeFromGitHub()  # git clone
+        if not success: return False
+    
+    if branchName == 'biling': branchName = 'billing' # location == branch (branch name fix)
+
     #if branch not main do only test
         #process.buildtest
         #process.deploytest
         #ans =test.runtest
         #if ans ok send mail
+
+    if branchName == "billing" or branchName == "weight":
+
+        process.dockerBuild(branchName)
+        if not success: return False
+
+        process.dockerDeploy(branchName,'test')
+        if not success: return False
+
+        process.testingDeploy(branchName)
+        if not success: return False
 
     #if branch main test and deploy
         #process.buildtest
@@ -22,49 +43,41 @@ def webhook():
         #ans =test.runtest
         #if ans ok send mail
         #if test ok deploy production
-    process.dockerBuild_Billing() 
-    
-    process.dockerBuild_Weight()
-    process.productionDeploy_Weight() 
-    process.productionDeploy_Billing()
 
-    # !!!main will call functions from process.py! this part will be depreciated.
-    # Call bash script to process for git trigger
-    # subprocess.check_call("./process.sh '%s'" % data['ref'], shell=True)
-    # commits = json.dumps(data['commits'])
+    elif branchName == "main":
+
+        # build, deploy and test weight
+        process.dockerBuild("weight")
+        if not success: return False
+
+        process.dockerDeploy("weight",'test')
+        if not success: return False
+
+        process.testingDeploy("weight")
+        if not success: return False
+
+
+        # build, deploy and test billing
+        process.dockerBuild("billing")
+        if not success: return False
+
+        process.dockerDeploy("billing",'test')
+        if not success: return False
+
+        process.testingDeploy("billing")
+        if not success: return False
+
+
+        # deploy to production
+        process.dockerDeploy("weight",'production')
+        if not success: return False
+        
+        process.dockerDeploy("billing",'production')
+        if not success: return False
 
     return data['ref']
 
-
-# def get_code():
-#     print('getcode')
-
-
-# def build():
-#     print('build')
-
-
-# def test():
-#     print('test')
-
-
-# def deploy():
-#     print('deploy')
-
-
-# def send_mail():
-#     list_admin = ['admin@mydomain.com']
-#     if not app.debug:
-#         import logging
-#         from logging.handlers import SMTPHandler
-#         mail_handler = SMTPHandler(mailhost=('smtpout.secureserver.net', 25),
-#                                    fromaddr='admin@mydomain.com',
-#                                    toaddrs=list_admin, subject='YourApplication Failed',
-#                                    credentials=('admin@mydomain.com', 'mypassword'))
-#         mail_handler.setLevel(logging.ERROR)
-#         app.logger.addHandler(mail_handler)
-
-        
+       
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
     # debug=True only in test. should be off in prod!
