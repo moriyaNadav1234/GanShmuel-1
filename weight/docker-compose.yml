@@ -5,8 +5,6 @@ services:
     image: flask_app:2
     ports:
      - '5000:5000'
-    volumes:
-     - ./app.py:/python-docker/app.py
     networks:
      - backend
 
