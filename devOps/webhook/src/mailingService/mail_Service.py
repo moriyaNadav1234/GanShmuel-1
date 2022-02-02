@@ -40,7 +40,7 @@ def mailNotification(proc, team, status): #proc = build/deploy, team = mailingli
     if team == 'weight': # W&DO
         names, emails = _getContacts('./mailingService/Weight_DevOps_MailingList.txt')
 
-    if team ==  'devops': 
+    if team ==  'DevOps': 
         names, emails = _getContacts('./mailingService/DevOps_MailingList.txt')
             
          # select EMail Template
