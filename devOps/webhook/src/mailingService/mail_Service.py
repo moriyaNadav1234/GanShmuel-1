@@ -7,8 +7,8 @@ from email.mime.text import MIMEText
 from unittest import case
 # from constants import mailAddress, password
 
-mailAddress='dorzvulundeveleapbluedevops@gmail.com'
-password='13578642'
+mailAddress='devopsteam.ganshmuel@gmail.com' #'dorzvulundeveleapbluedevops@gmail.com'
+password='green_devops' #'13578642'
 
 
 # create 3 mailing lists - DevOps only, Billing+DevOps, Weight+DevOps
