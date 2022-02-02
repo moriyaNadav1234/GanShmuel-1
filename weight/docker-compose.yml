@@ -1,5 +1,8 @@
 version: "3.7"
 
 services:
+  testWeight:
+    build: .
   weight:
-    image: nginx:alpine
+      image: nginx:alpine
+  

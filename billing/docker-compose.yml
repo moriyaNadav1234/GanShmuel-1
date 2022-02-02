@@ -1,5 +1,8 @@
 version: "3.7"
 
 services:
+  testBilling:
+    build: .
   billing:
-    image: nginx:alpine
+      image: nginx:alpine
+  
