@@ -37,6 +37,13 @@ def getCodeFromGitHub(branchName):
             pass #figure out how to update CI_SERVER
             # branchName="devOps"
             # subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml down')
+        elif branchName == "main":
+            branchName="billing"
+            print(f'process line 42 - main update before docker-compose down')
+            subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} down', shell=True, check=True)
+            branchName="weight"
+            subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} down', shell=True, check=True)
+            
         else: 
             subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml --env-file ./GanShmuel/{branchName}/.env_production_{branchName} down', shell=True, check=True)
         
