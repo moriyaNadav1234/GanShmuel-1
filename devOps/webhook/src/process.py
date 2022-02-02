@@ -15,9 +15,15 @@ def firstCopy():
         except:
             sendErrorToLog('repo_log.txt', 'failed', 'repo creation')
             mailNotification('updateRepo', 'devops', False)
+            terminateContainer()
+            return True, False
         else:
             mailNotification('updateRepo', 'devops', True)
             sendErrorToLog('repo_log.txt', 'success', 'repo creation')
+            return True, True
+    else:
+        return False, False
+
 
 def getCodeFromGitHub():
     # git clone git@github.com:develeapDorZ/GanShmuel.git
@@ -29,80 +35,115 @@ def getCodeFromGitHub():
     except:
         sendErrorToLog('repo_log.txt', 'failed', 'repo update')
         mailNotification('updateRepo', 'devops', False)
+        terminateContainer()
+        return False
     else:
         mailNotification('updateRepo', 'devops', True)
         sendErrorToLog('repo_log.txt', 'success', 'repo update')
+        return True
 
 
-def dockerBuild_Weight():
+def dockerBuild(branchName):
     try:
-        subprocess.run("docker-compose -f ./GanShmuel/weight/docker-compose.yml build", shell=True, check=True)
+        subprocess.run("docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml build", shell=True, check=True)
 
     except:
-        sendErrorToLog('weight_team_log.txt', 'failed', 'build')
-        mailNotification('build', 'weight', False)
+        sendErrorToLog('{branchName}_team_log.txt', 'failed', 'build')
+        mailNotification('build', branchName, False)
+        terminateContainer()
+        return False
     else:
-        mailNotification('build', 'weight', True)
-        sendErrorToLog('weight_team_log.txt', 'success', 'build')
+        mailNotification('build', branchName, True)
+        sendErrorToLog('{branchName}_team_log.txt', 'success', 'build')
+        return True
 
 
-def dockerBuild_Billing():
+def dockerDeploy(branchName, env):
     try:
-        subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml build", shell=True, check=True)
+        subprocess.run("docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml up -d", shell=True, check=True)
 
     except:
-        sendErrorToLog('billing_team_log.txt', 'failed', 'build')
-        mailNotification('build', 'billing', False)
+        sendErrorToLog('{branchName}_team_log.txt', 'failed', 'deploy')
+        mailNotification('build', branchName, False)
+        terminateContainer()
+        return False
     else:
-        mailNotification('build', 'billing', True)
-        sendErrorToLog('billing_team_log.txt', 'success', 'build')
+        mailNotification('build', branchName, True)
+        sendErrorToLog('{branchName}_team_log.txt', 'success', 'deploy')
+        return True
 
 
-def productionDeploy_Billing():
-    try:
-        subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml up -d", shell=True, check=True)
-
-    except:
-        sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
-        mailNotification('build', 'weight', False)
-    else:
-        mailNotification('build', 'weight', True)
-        sendErrorToLog('billing_team_log.txt', 'success', 'deploy')
-
-
-def productionDeploy_Weight():
-    try:
-        subprocess.run("docker-compose -f ./GanShmuel/weight/docker-compose.yml up -d", shell=True, check=True)
-
-    except:
-        sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
-        mailNotification('deploy', 'weight', False)
-    else:
-        mailNotification('deploy', 'weight', True)
-        sendErrorToLog('weight_team_log.txt', 'success', 'deploy')
-
-
-def testingDeploy_Billing():
+def testingDeploy(branchName):
     # TODO: run docker-compose for testing
     # docker-compose up -d >> /app/test.log
     try:
-        subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml up -d", shell=True, check=True)
+        #subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml up -d", shell=True, check=True)
+        # -- Need to hookup with the testing
+        print("i am here because I have no code yet")
 
     except:
-        sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
-        mailNotification('deploy', 'billing', False)
+        sendErrorToLog('{branchName}_team_log.txt', 'failed', 'test')
+        mailNotification('build', branchName, False)
+        terminateContainer()
+        return False
     else:
-        mailNotification('deploy', 'billing', True)
-        sendErrorToLog('billing_team_log.txt', 'success', 'deploy')
+        mailNotification('build', branchName, True)
+        sendErrorToLog('{branchName}_team_log.txt', 'success', 'test')
+        return True
 
 
-def productionDeploy_Weight():
-    try:
-        subprocess.run("docker-compose -f ./GanShmuel/weight/docker-compose.yml up -d", shell=True, check=True)
+def terminateContainer():
+    # ---- WHat are the containers names defined by the teams
+    if subprocess.run('docker ps | grep "billing_test"') == "billing_test":
+        subprocess.run("docker-compose billing_test down")
+    if subprocess.run('docker ps | grep "weight_test"') == "weight_test":
+        subprocess.run("docker-compose weight_test down")
+    
 
-    except:
-        sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
-        mailNotification('deploy', 'weight', False)
-    else:
-        mailNotification('deploy', 'weight', True)
-        sendErrorToLog('weight_team_log.txt', 'success', 'deploy')
+# def dockerBuild_Billing():
+#     try:
+#         subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml build", shell=True, check=True)
+
+#     except:
+#         sendErrorToLog('billing_team_log.txt', 'failed', 'build')
+#         mailNotification('build', 'billing', False)
+#     else:
+#         mailNotification('build', 'billing', True)
+#         sendErrorToLog('billing_team_log.txt', 'success', 'build')
+
+# def deploy_Weight(env):
+#     try:
+#         subprocess.run("docker-compose -f ./GanShmuel/weight/docker-compose.yml up -d", shell=True, check=True)
+
+#     except:
+#         sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
+#         mailNotification('deploy', 'weight', False)
+#     else:
+#         mailNotification('deploy', 'weight', True)
+#         sendErrorToLog('weight_team_log.txt', 'success', 'deploy')
+
+
+# def testingDeploy_Billing():
+#     # TODO: run docker-compose for testing
+#     # docker-compose up -d >> /app/test.log
+#     try:
+#         subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml up -d", shell=True, check=True)
+
+#     except:
+#         sendErrorToLog('billing_team_log.txt', 'failed', 'deploy')
+#         mailNotification('deploy', 'billing', False)
+#     else:
+#         mailNotification('deploy', 'billing', True)
+#         sendErrorToLog('billing_team_log.txt', 'success', 'deploy')
+
+
+# def testingDeploy_Weight():
+#     try:
+#         subprocess.run("docker-compose -f ./GanShmuel/weight/docker-compose.yml up -d", shell=True, check=True)
+
+#     except:
+#         sendErrorToLog('weight_team_log.txt', 'failed', 'deploy')
+#         mailNotification('deploy', 'weight', False)
+#     else:
+#         mailNotification('deploy', 'weight', True)
+#         sendErrorToLog('weight_team_log.txt', 'success', 'deploy')
