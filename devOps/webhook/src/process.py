@@ -1,8 +1,8 @@
 import os, subprocess
+import testing
 
 # from git import Repo
 from mailingService.mail_Service import sendErrorToLog, mailNotification
-
 
 import constants
 
@@ -75,14 +75,26 @@ def dockerDeploy(branchName, env):
 
 
 def testingDeploy(branchName):
-    # TODO: run docker-compose for testing
-    # docker-compose up -d >> /app/test.log
-    try:
-        #subprocess.run("docker-compose -f ./GanShmuel/billing/docker-compose.yml up -d", shell=True, check=True)
-        # -- Need to hookup with the testing
-        print("i am here because I have no code yet")
+    path_weight = './GanShmuel/weight/app/test/'
+    path_billing = './GanShmuel/billing/app/test/'
 
-    except:
+    answers = []
+    if branchName == 'weight':
+        answers = testing.testWeight(path_weight)
+    elif branchName == 'billing':
+        answers = testing.testWeight(path_billing)
+    elif branchName == 'main':
+        answers = testing.testProduction(path_billing,path_weight)
+
+    if len(answers) == 0:
+        return False
+
+    success = True
+    for ans in answers:
+        if ans.status != 'ok':
+            success = False
+
+    if not success:
         sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'test')
         mailNotification('build', branchName, False)
         terminateContainer()
