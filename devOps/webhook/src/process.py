@@ -12,6 +12,7 @@ def firstCopy():
     if  not os.path.isdir('GanShmuel'):
         try:
             subprocess.run("git clone https://github.com/develeapDorZ/GanShmuel", shell=True, check=True)
+            subprocess.run("git -C GanShmuel checkout DevOps", shell=True, check=True)
         except:
             sendErrorToLog('repo_log.txt', 'failed', 'repo creation')
             mailNotification('updateRepo', 'devops', False)
@@ -19,13 +20,13 @@ def firstCopy():
             mailNotification('updateRepo', 'devops', True)
             sendErrorToLog('repo_log.txt', 'success', 'repo creation')
 
-def getCodeFromGitHub():
+def getCodeFromGitHub(branchName):
     # git clone git@github.com:develeapDorZ/GanShmuel.git
     try:
         #Repo.pull(os.path.join(constants.gitHubURL, constants.deployDirectory))
         # pull -f --all - update the whole repo
         subprocess.run("git -C GanShmuel pull -f --all", shell=True, check=True)#noticed this can cause conflicts problematic???  
-
+        
     except:
         sendErrorToLog('repo_log.txt', 'failed', 'repo update')
         mailNotification('updateRepo', 'devops', False)

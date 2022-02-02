@@ -1,7 +1,6 @@
-from flask import Flask
-from flask import request, json
+from flask import Flask, request, json
 import process
-import constants
+from constants import *
 
 app = Flask(__name__)
 
@@ -67,5 +66,5 @@ def webhook():
 
         
 if __name__ == '__main__':
-    app.run(host=constants.HOST, port=constants.PORT, debug=constants.TEST)
+    app.run(host='0.0.0.0', port=5000, debug=True)
     # debug=True only in test. should be off in prod!
