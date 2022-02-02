@@ -82,8 +82,8 @@ def dockerDeploy(branchName, env):
 
 
 def testingDeploy(branchName):
-    path_weight = './GanShmuel/weight/app/test/'
-    path_billing = './GanShmuel/billing/app/test/'
+    path_weight = './GanShmuel/weight/test/'
+    path_billing = './GanShmuel/billing/test/'
 
     answers = []
     if branchName == 'weight':
