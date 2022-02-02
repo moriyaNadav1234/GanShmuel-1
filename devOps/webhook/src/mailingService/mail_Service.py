@@ -61,7 +61,7 @@ def mailNotification(proc, team, status): #proc = build/deploy, team = mailingli
         message = message_template.substitute(PERSON_NAME=name.title(), TIME_STAMP=timeOfEvent, PROCCESS=proc.upper()) #add the actual name to the template
         msg['From']=mailAddress
         msg['To']=email
-        msg['Subject']=f'Important Update - {proc.upper()} proccess {st.upper()}'
+        msg['Subject']=f'Important Update - for team {team}: {proc.upper()} proccess {st.upper()}'
         msg.attach(MIMEText(message,'plain'))
         s.send_message(msg) #sending the actual email
         del msg
