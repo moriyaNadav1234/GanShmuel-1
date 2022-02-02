@@ -46,31 +46,31 @@ def getCodeFromGitHub(branchName):
 
 def dockerBuild(branchName):
     try:
-        subprocess.run("docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml build", shell=True, check=True)
+        subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml build', shell=True, check=True)
 
     except:
-        sendErrorToLog('{branchName}_team_log.txt', 'failed', 'build')
+        sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'build')
         mailNotification('build', branchName, False)
         terminateContainer()
         return False
     else:
         mailNotification('build', branchName, True)
-        sendErrorToLog('{branchName}_team_log.txt', 'success', 'build')
+        sendErrorToLog(f'{branchName}_team_log.txt', 'success', 'build')
         return True
 
 
 def dockerDeploy(branchName, env):
     try:
-        subprocess.run("docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml up -d", shell=True, check=True)
+        subprocess.run(f"docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml up -d", shell=True, check=True)
 
     except:
-        sendErrorToLog('{branchName}_team_log.txt', 'failed', 'deploy')
+        sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'deploy')
         mailNotification('build', branchName, False)
         terminateContainer()
         return False
     else:
         mailNotification('build', branchName, True)
-        sendErrorToLog('{branchName}_team_log.txt', 'success', 'deploy')
+        sendErrorToLog(f'{branchName}_team_log.txt', 'success', 'deploy')
         return True
 
 
@@ -83,22 +83,22 @@ def testingDeploy(branchName):
         print("i am here because I have no code yet")
 
     except:
-        sendErrorToLog('{branchName}_team_log.txt', 'failed', 'test')
+        sendErrorToLog(f'{branchName}_team_log.txt', 'failed', 'test')
         mailNotification('build', branchName, False)
         terminateContainer()
         return False
     else:
         mailNotification('build', branchName, True)
-        sendErrorToLog('{branchName}_team_log.txt', 'success', 'test')
+        sendErrorToLog(f'{branchName}_team_log.txt', 'success', 'test')
         return True
 
 
 def terminateContainer():
     # ---- WHat are the containers names defined by the teams
-    if subprocess.run('docker ps | grep "billing_test"') == "billing_test":
-        subprocess.run("docker-compose billing_test down")
-    if subprocess.run('docker ps | grep "weight_test"') == "weight_test":
-        subprocess.run("docker-compose weight_test down")
+    if subprocess.run('docker ps | grep "testbilling_ct"') == "testbilling_ct":
+        subprocess.run("docker-compose testbilling_ct down")
+    if subprocess.run('docker ps | grep "testweight_ct"') == "testweight_ct":
+        subprocess.run("docker-compose testweight_ct down")
     
 
 # def dockerBuild_Billing():

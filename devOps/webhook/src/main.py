@@ -20,16 +20,7 @@ def webhook():
     
     if branchName == 'biling': branchName = 'billing' # location == branch (branch name fix)
 
-    #if branch not main do only test
-        #process.buildtest
-        #process.deploytest
-        #ans =test.runtest
-        #if ans ok send mail
-
     if branchName == "billing" or branchName == "weight":
-
-        process.dockerBuild(branchName)
-        if not success: return False
 
         process.dockerDeploy(branchName,'test')
         if not success: return False
@@ -37,28 +28,12 @@ def webhook():
         process.testingDeploy(branchName)
         if not success: return False
 
-    #if branch main test and deploy
-        #process.buildtest
-        #process.deploytest
-        #ans =test.runtest
-        #if ans ok send mail
-        #if test ok deploy production
-
     elif branchName == "main":
-
-        # build, deploy and test weight
-        process.dockerBuild("weight")
-        if not success: return False
 
         process.dockerDeploy("weight",'test')
         if not success: return False
 
         process.testingDeploy("weight")
-        if not success: return False
-
-
-        # build, deploy and test billing
-        process.dockerBuild("billing")
         if not success: return False
 
         process.dockerDeploy("billing",'test')
