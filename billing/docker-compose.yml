@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.7'
 
 services:
 
@@ -7,7 +7,7 @@ services:
     container_name: ${DB_NAME}
     volumes:
       - ./db:/docker-entrypoint-initdb.d
-      - ${VOLUME_DATA}:/var/lib/mysql
+      - mysql_db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: catty
 
@@ -22,3 +22,8 @@ services:
 volumes:
   mysql_db:
     external: false
+networks:
+    backend:
+      driver: bridge
+
+  
