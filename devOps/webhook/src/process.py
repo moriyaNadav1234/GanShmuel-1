@@ -45,6 +45,13 @@ def getCodeFromGitHub(branchName):
 
 
 def dockerBuild(branchName):
+    
+    # remove image if already built
+    image = subprocess.run(f'docker image ls | grep {branchName}', shell=True, check=True)
+    imageName = image[0:image.find(" ")]
+    if imageName.find(branchName) >= 0:
+        subprocess.run(f'docker rmi {imageName}')
+
     try:
         subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml build', shell=True, check=True)
 
