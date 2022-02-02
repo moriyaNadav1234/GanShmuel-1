@@ -32,6 +32,7 @@ def getCodeFromGitHub(branchName):
         #Repo.pull(os.path.join(constants.gitHubURL, constants.deployDirectory))
         # pull -f --all - update the whole repo
         subprocess.run("git -C GanShmuel pull -f --all", shell=True, check=True) #noticed this can cause conflicts problematic???  
+        subprocess.run(f'docker-compose -f ./GanShmuel/{branchName}/docker-compose.yml down')
         
     except:
         sendErrorToLog('repo_log.txt', 'failed', 'repo update')
