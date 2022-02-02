@@ -33,9 +33,9 @@ def webhook():
 
     elif branchName == "main":
 
-        # # build, deploy and test weight
-        # process.dockerBuild("weight")
-        # if not success: return False
+        # build, deploy and test weight
+        process.dockerBuild("weight")
+        if not success: return False
 
         process.dockerDeploy("weight",'test')
         if not success: return False
@@ -43,9 +43,9 @@ def webhook():
         process.testingDeploy("weight")
         if not success: return False
 
-        # # build, deploy and test billing
-        # process.dockerBuild("billing")
-        # if not success: return False
+        # build, deploy and test billing
+        process.dockerBuild("billing")
+        if not success: return False
 
         process.dockerDeploy("billing",'test')
         if not success: return False
