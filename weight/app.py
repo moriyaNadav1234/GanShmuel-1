@@ -1,8 +1,7 @@
 from crypt import methods
 from email import header
-import re
 from flask import Flask ,request
-import mysql.connector, json,csv
+import mysql.connector, json, csv, ast
 from datetime import datetime
 import os
 
@@ -53,14 +52,14 @@ def item(id):
         try:
             fromTime=datetime.strptime(From,"%Y-%m-%d %H:%M:%S")
         except:
-            return "invalid from time, please make sure to use the YYYY-MM-DD HH:MM:SS format"
+            return "invalid from time, please make sure to use the YYYY-MM-DD HH:MM:SS format",404
     if To=="now":
         toTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     else:
         try:
             toTime=datetime.strptime(To,"%Y-%m-%d %H:%M:%S")
         except:
-            return "invalid to time, please make sure to use the YYYY-MM-DD HH:MM:SS format"
+            return "invalid to time, please make sure to use the YYYY-MM-DD HH:MM:SS format",404
 
     #conncet to DB
     mydb = dbConnection()
@@ -94,7 +93,8 @@ def item(id):
         "weight":queryresult[0][0],
         "transactions":transactions})
 
-    return str(jsonFile)
+
+    return str(jsonFile),200
 
 
 @app.route('/unknown') 
@@ -171,32 +171,124 @@ def weight():
             return str(jsonList)
 
     else:
-        parms={"direction":None, #string in/out/None
-        "truck":None, #string
-        "containers":None, #list of string
-        "weight":None, #int =>0
-        "unit":None, #string
-        "force":None, #bool True/Flse
-        "produce":None} #string
+        parms={"direction":None, 
+        "truck":None, 
+        "containers":None, 
+        "weight":None, 
+        "unit":None, 
+        "force":None, 
+        "produce":None} 
         
         for i in request.args.items():
             if not i[0] in parms:
                 return f"{i[0]} isn't a legal value, values you need to send are: direction,truck,containers,weight,unit,force,produce", 400
-            # if i[0]=="weight" and i[1]<0 or i[0]=="force" and not isinstance(i[1], bool) or i[0]=="direction" and not i[1]=="in" and not i[1]=="out":
-            #     return "make sure to insert into weight 0 or more, force to be True or False and direction to be in/out or keep it empty for None",400
-            
             if not i[0]=="":
                 parms[i[0]]=i[1]
-            # else:
-            #    parms[i[0]]=None 
+ 
+        #conncet to DB
+        mydb = dbConnection()
+        #used to send queries
+        mycursor = mydb.cursor()
+        mycursor.execute("SELECT direction FROM transactions ORDER BY id DESC LIMIT 1") #get the last direction
+        queryresult = mycursor.fetchall()
+ 
+        last_direction = queryresult[0][0]
+        #check if direction is in
+        
+        if parms["direction"]=="in" and last_direction == "out" :
+            time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            mycursor.execute(f"INSERT INTO `transactions` (`datetime`,`direction`,`truck`,`containers`,`bruto`,`truckTara`,`neto`,`produce`) VALUES ( '{time}', '{parms['direction']}', '{parms['truck']}', '{parms['containers']}', {parms['weight']}, {'null'}, {'null'}, '{parms['produce']}')")
+            
+            id=mycursor.execute("SELECT id FROM transactions ORDER BY id DESC LIMIT 1")
+            jsonfile=json.dumps({"id":id,"truck":parms["truck"],"weight":str(parms["weight"])})
 
-        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            return jsonfile,200
+        
+        
+        elif parms["direction"]=="in" and last_direction == "in" :
+            if parms["force"] == "True"  :
+                time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                mycursor.execute(f"update transactions set datetime='{time}', direction='{parms['direction']}', truck='{parms['truck']}', containers='{parms['containers']}', bruto={parms['weight']}, truckTara={'null'}, neto={'null'}, produce='{parms['produce']}' ORDER BY id DESC LIMIT 1;")
 
-        return str(parms) #TODO: make post 
+                id=mycursor.execute("SELECT id FROM transactions ORDER BY id DESC LIMIT 1")
+                jsonfile=json.dumps({"id":id,"truck":parms["truck"],"weight":str(parms["weight"])})
+
+                return jsonfile,200
+            else :
+                return "Force is not activate, if you wish to overwrite last transection please use force flag as True",400
+         
+         
+        #check if direction is out 
+        elif parms["direction"]=="out" and last_direction == "in":
+                time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                
+                containersQuery=str((parms["containers"][1:-1]).split(","))[1:-1]
+                mycursor.execute(f"SELECT sum(weight) FROM containers_registered where container_id in({containersQuery})")
+                containers_weight = mycursor.fetchall()[0][0]
+
+                mycursor.execute(f"SELECT bruto FROM transactions ORDER BY id DESC LIMIT 1")
+                bruto_in=mycursor.fetchall()[0][0]
+                
+                trucktara=int(parms["weight"])-bruto_in
+                neto=int(parms["weight"])-bruto_in-containers_weight
+                mycursor.execute(f"INSERT INTO `transactions` (`datetime`,`direction`,`truck`,`containers`,`bruto`,`truckTara`,`neto`,`produce`) VALUES ( '{time}', '{parms['direction']}', '{parms['truck']}', '{parms['containers']}', {parms['weight']}, {trucktara}, {neto}, '{parms['produce']}')")
+                
+                id=mycursor.execute("SELECT id FROM transactions ORDER BY id DESC LIMIT 1")
+                jsonfile=json.dumps({"id":id,"truck":parms["truck"],"weight":str(parms["weight"]),"truckTara":str(trucktara),"neto":str(neto)})
+
+                return jsonfile,200
+         
+            
+        #check if direction is out
+        elif parms["direction"]=="out" and last_direction == "out":
+            if parms["force"] == "True" :
+                time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                
+                containersQuery=str((parms["containers"][1:-1]).split(","))[1:-1]
+                mycursor.execute(f"SELECT sum(weight) FROM containers_registered where container_id in({containersQuery})")
+                containers_weight = mycursor.fetchall()[0][0]
+
+                mycursor.execute(f"SELECT bruto FROM transactions ORDER BY id DESC LIMIT 1")
+                bruto_in=mycursor.fetchall()[0][0]
+                
+                trucktara=int(parms["weight"])-bruto_in
+                neto=int(parms["weight"])-bruto_in-containers_weight
+                mycursor.execute(f"update transactions set datetime='{time}', direction='{parms['direction']}', truck='{parms['truck']}', containers='{parms['containers']}', bruto={parms['weight']}, truckTara={'null'}, neto={'null'}, produce='{parms['produce']}' ORDER BY id DESC LIMIT 1;")
+
+                id=mycursor.execute("SELECT id FROM transactions ORDER BY id DESC LIMIT 1")
+                jsonfile=json.dumps({"id":id,"truck":parms["truck"],"weight":str(parms["weight"]),"truckTara":str(trucktara),"neto":str(neto)})
+
+                return jsonfile,200
+
+            else :
+                return "Force is not activate, if you wish to overwrite last transection please use force flag as True",400
+        
+        elif parms["direction"]=="none":
+            if last_direction == "none" or last_direction == "out" :
+                time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                
+                containersQuery=str((parms["containers"][1:-1]).split(","))[1:-1]
+                mycursor.execute(f"SELECT sum(weight) FROM containers_registered where container_id in({containersQuery})")
+                containers_weight = mycursor.fetchall()[0][0]
+
+                mycursor.execute(f"SELECT bruto FROM transactions ORDER BY id DESC LIMIT 1")
+                bruto_in=mycursor.fetchall()[0][0]
+                
+                trucktara=int(parms["weight"])-bruto_in
+                neto=int(parms["weight"])-bruto_in-containers_weight
+                mycursor.execute(f"INSERT INTO `transactions` (`datetime`,`direction`,`truck`,`containers`,`bruto`,`truckTara`,`neto`,`produce`) VALUES ( '{time}', '{parms['direction']}', '{parms['truck']}', '{parms['containers']}', {parms['weight']}, {trucktara}, {neto}, '{parms['produce']}')")
+                
+                id=mycursor.execute("SELECT id FROM transactions ORDER BY id DESC LIMIT 1")
+                jsonfile=json.dumps({"id":id,"truck":parms["truck"],"weight":str(parms["weight"]),"truckTara":str(trucktara),"neto":str(neto)})
+
+                return jsonfile,200
+
+            else :
+                return "Cant enter none followed by in",400
+        else :
+            return "Invalid input",400
 
     return "this is not working, contact the local zoo for help" #TODO: test only use: return 'this is route weight'
-
-
     
 @app.route('/session/<id>')
 def session(id):
@@ -220,16 +312,16 @@ def session(id):
             "truckTara":row[2],
             "neto":row[3]}))
 
-        return str(jasonList)
+        return str(jasonList),200
 
 @app.route('/batch-weight',methods=['POST'])
 def batch():
      
     mydb=dbConnection()
     if not request.args.get('file') == None and not request.args.get('file') =="":
-        file_name=request.args.get('file')
+        return request.args.get('file')
         if not file_name.endswith('.csv') and not file_name.endswith('.json'):
-            return "please make sure the file type is csv or json"    
+            return "please make sure the file type is csv or json",400    
     else:
         return "please enter file name"
     
@@ -284,7 +376,7 @@ def batch():
         f.close() 
         return "data intered successfully" 
         
-
+#will hold front end if we'll make it on time, if you're from the future and read it in hope it'll help you, guess you'll die ¯\(ʘᗩʘ’)/¯
 @app.route('/')
 def home():
     return 'this will be a home page'

@@ -6,8 +6,7 @@ COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
 COPY app.py .
-VOLUME ./in 
-VOLUME /python-docker  #TODO: delete
+VOLUME ./in
 
 
 ENTRYPOINT [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
