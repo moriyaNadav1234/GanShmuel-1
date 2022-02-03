@@ -1,0 +1,74 @@
+[
+    {
+        "api": "health",
+        "request_type": "GET",
+        "response_type": "status_code",
+        "parameters" : "None",
+        "result": 200,
+        "description": "API health check"
+    },
+    {
+        "api": "unknown",
+        "request_type": "GET",
+        "response_type": "status_code",
+        "parameters" : "None",
+        "result": 200,
+        "description": "show containers with unknown weight"
+    },
+ 
+    {
+        "api": "/weight",
+        "request_type": "GET",
+        "response_type": "status_code",
+        "parameters" : {"from":"2022-02-01 13:00:11","to":"2022-01-31 15:00:11","filter": "in"},
+        "result": 200,
+        "description": "returned array of json files of the result"
+    },
+    {
+        "api": "/weight",
+        "request_type": "POST",
+        "response_type": "body_response",
+        "parameters" : {"direction":"in","truck":"123456","containers": "[1222,41411,2222]"
+            ,"weight":13000,"unit":"lbs","force":false,"produce":"apples"},
+        "result": "added new weight",
+        "description": "inserted the parms to the data base"
+    },
+ 
+    {
+        "api": "/batch-weight",
+        "request_type": "POST",
+        "response_type": "body_response",
+        "parameters" : {"file":"containers2.csv"},
+        "result": "data intered successfully",
+        "description": "add data from the file into the containers table "
+    },
+ 
+    {
+        "api": "/item/c-1gtfg",
+        "request_type": "GET",
+        "response_type": "status_code",
+        "parameters" : {"from":"2022-02-01 13:00:11","to":"2022-01-31 15:00:11","item":"container"},
+        "result": 200,
+        "description": "item is in the database"
+    },
+ 
+    {
+        "api": "/session/10001",
+        "request_type": "GET",
+        "response_type": "status_code",
+        "parameters" : {"from":"14:00:05","to":"15:30:09"},
+        "result": 200,
+        "description": "testing if the id session of the track is exist."
+    },
+ 
+    {
+        "api": "/session/1b22",
+        "request_type": "GET",
+        "response_type": "status_code",
+        "parameters" : {"from":"14:00:05","to":"15:30:09"},
+        "result": 404,
+        "description": "testing if the id session is not exist returned error."
+    }
+ 
+  
+]
