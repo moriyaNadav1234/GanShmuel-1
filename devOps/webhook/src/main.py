@@ -16,9 +16,38 @@ def index():
 
 @app.route('/monitoring', methods=['GET'])
 def get_message():
-    results = process.testHealthSiblings()
-    for i in results:
-        print(f'server {i[0]} is {i[1]}')
+    build_billing=""
+    if os.path.isfile("./logs/billing_team_log.txt"): 
+        logB = open("./logs/billing_team_log.txt", 'r')
+        count = 0
+        for i in logB:
+            count+=1
+        logB.seek(0)
+        try:
+            build_billing = logB.readlines()[count-1].split(" ")[4]
+        except:
+            print("error")
+        logB.close()
+    else:
+        process.dockerBuild("billing")
+
+    build_weight=""
+    if os.path.isfile("./logs/weight_team_log.txt"): 
+        logW = open("./logs/weight_team_log.txt", 'r')
+        count = 0
+        for i in logW:
+            count+=1
+        logW.seek(0)
+        try:
+            build_weight = logW.readlines()[count-1].split(" ")[4]
+        except:
+            print("error")
+        logW.close()
+    else:
+        process.dockerBuild("weight")
+
+
+    return {"buildBilling":build_billing[0:6],"buildWeight":build_weight[0:6]}
 
 @app.route("/webhook", methods=['POST'])
 def webhook():
