@@ -133,9 +133,9 @@ def testingDeploy(branchName):
 
 def testHealthSiblings():
     results = []
-    results.append('weight app health', subprocess.check_output(f'curl 0.0.0.0:8081/health', shell=True, check=True))
-    results.append('billing app health', subprocess.check_output(f'curl 0.0.0.0:8080/health', shell=True, check=True))
-    results.append('billing db health', subprocess.check_output(f'curl 0.0.0.0:8080/db_health', shell=True, check=True))
+    results.append('weight app health', subprocess.check_output(f'curl 0.0.0.0:8081/health', shell=True))
+    results.append('billing app health', subprocess.check_output(f'curl 0.0.0.0:8080/health', shell=True))
+    results.append('billing db health', subprocess.check_output(f'curl 0.0.0.0:8080/db_health', shell=True))
     # checkresults.append(subprocess.check_output(f'curl localhost:8080/db_health'))
     return results
 
