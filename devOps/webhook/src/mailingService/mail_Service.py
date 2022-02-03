@@ -32,6 +32,7 @@ s.login(mailAddress,password)
     
 
 def mailNotification(proc, team, status): #proc = build/deploy, team = mailinglist, status = success/fail
+    pass #because we killed 2 gmails
     message_template = []
     names = []
     emails = [] 
