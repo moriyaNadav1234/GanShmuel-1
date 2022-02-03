@@ -95,8 +95,8 @@
         "api": "truck",
         "request_type": "POST",
         "response_type": "status_code",
-        "parameters": {"id":"32-441-51","provider_id":"10012"},
-        "result": 201,
+        "parameters": {"id":"33-999-51","provider_id":"10012"},
+        "result": 200,
         "description": "Inserting Truck"
     },
 

@@ -38,7 +38,8 @@ def connect():
             host="billingDB",
             user="root",
             password="catty",
-            database="billdb"
+            database="billdb",
+            connect_timeout=1
         )
     except:
         LOG("Connection failed!",LOG_TYPE.ERROR)

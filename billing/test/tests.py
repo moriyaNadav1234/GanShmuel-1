@@ -3,7 +3,7 @@ import requests
 import json
 
 HOST = "0.0.0.0"
-PORT = "5001"
+PORT = "8080"
 URL = f'http://{HOST}:{PORT}'
 
 def test():
@@ -45,5 +45,8 @@ def test():
         except:
             test_results.append({"status":"err","reason":f'{reason} failed'})
 
-    #print(test_results)
-    return test_results
+    print(json.dumps(test_results))
+    return 13
+
+if __name__ == "__main__":
+    test()
