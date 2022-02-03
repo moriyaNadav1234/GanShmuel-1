@@ -4,19 +4,20 @@
 
     function updateChat() {
       $.get("/monitoring",function(data) {
-
       var ok=document.createElement("span")
       var err=document.createElement("span")
       $(ok).append('<div> <b>Ok</b> <svg height="30" width="100"> <circle cx="50" cy="20" r="10" fill="green" /></svg></div>')
       $(err).append('<div> <b>ERROR</b> <svg height="30" width="100"> <circle cx="50" cy="20" r="10" fill="red" /></svg></div>')
-          if(data.billing=="Ok")
-          $("td")[0].innerHTML+=ok.innerHTML
-        else 
+          if(data.buildBilling=="FAILED")
           $("td")[0].innerHTML+=err.innerHTML
-        if(data.weight=="Ok")
-          $("td")[1].innerHTML+=ok.innerHTML
         else 
+          $("td")[0].innerHTML+=ok.innerHTML
+
+        if(data.buildWeight=="FAILED")
           $("td")[1].innerHTML+=err.innerHTML
+        else 
+          $("td")[1].innerHTML+=ok.innerHTML
+
           
           
         
@@ -39,8 +40,8 @@
 
     <table style="width:100%">
       <tr>
-        <th>testing billing</th>
-        <th>testing weight</th>
+        <th>build billing</th>
+        <th>build weight</th>
 
       </tr>
       <tr>
