@@ -25,14 +25,14 @@ def _readTemplate(filename):
     with open(filename,mode='r', encoding='utf-8') as template_file:
         template_file_content = template_file.read()
     return Template(template_file_content)    
-
-s = smtplib.SMTP(host='smtp.gmail.com', port=587)
-s.starttls()
-s.login(mailAddress,password)
+### turn on for demo
+# s = smtplib.SMTP(host='smtp.gmail.com', port=587)
+# s.starttls()
+# s.login(mailAddress,password)
     
 
 def mailNotification(proc, team, status): #proc = build/deploy, team = mailinglist, status = success/fail
-    pass #because we killed 2 gmails
+    return #because we killed 2 gmails
     message_template = []
     names = []
     emails = [] 
