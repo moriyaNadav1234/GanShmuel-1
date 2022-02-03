@@ -1,0 +1,11 @@
+Dear ${PERSON_NAME},
+
+Your Attention is Needed!
+Production Server - ${PROCCESS} proccess faild!!! 
+
+please check and fix bugs and contact DevOps team. 
+
+Time of event: ${TIME_STAMP}
+
+Regards,
+Blue DevOps Team

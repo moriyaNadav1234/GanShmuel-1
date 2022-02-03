@@ -11,7 +11,7 @@ app = Flask(__name__)
 def dbConnection():
     try:
         mydb = mysql.connector.connect(
-        host="weightMySql",
+        host="weightmysql",
         port='3306',
         database="weight",
         user="root",
@@ -319,7 +319,7 @@ def batch():
      
     mydb=dbConnection()
     if not request.args.get('file') == None and not request.args.get('file') =="":
-        return request.args.get('file')
+        file_name = request.args.get('file')
         if not file_name.endswith('.csv') and not file_name.endswith('.json'):
             return "please make sure the file type is csv or json",400    
     else:
