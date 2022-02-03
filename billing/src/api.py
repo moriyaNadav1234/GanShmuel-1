@@ -9,7 +9,7 @@ import mysql.connector
 import requests
 import xlwt
 import io
-import tests
+# import tests
 
 class LOG_TYPE(Enum):
     INFO=0
@@ -382,6 +382,6 @@ def Get_Bill(id):
     }
     return json.dumps(recipet),200,{'Content-Type':'application/json'}
 
-@app.route("/runtests")
-def runtests():
-    return json.dumps(tests())
+# @app.route("/runtests")
+# def runtests():
+#     return json.dumps(tests())
