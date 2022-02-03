@@ -73,7 +73,7 @@ def webhook():
         process.dockerDeploy("billing",'production')
         # if not success: return False
         
-        get_message()
+        # get_message()
     
     
     
