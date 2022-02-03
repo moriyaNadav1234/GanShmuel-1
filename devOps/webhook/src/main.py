@@ -1,3 +1,4 @@
+from unittest import result
 from flask import Flask, request, json, render_template
 import process
 from constants import *
@@ -11,8 +12,9 @@ def index():
 
 @app.route('/monitoring', methods=['GET'])
 def get_message():
-    # process.testingDeploy_Billing()
-    return {"billing":"Ok","weight":"err"}
+    results = process.testHealthSiblings()
+    for i in results:
+        print(f'server {i[0]} is {i[1]}')
 
 @app.route("/webhook", methods=['POST'])
 def webhook():
@@ -70,7 +72,11 @@ def webhook():
         
         process.dockerDeploy("billing",'production')
         # if not success: return False
-
+        
+        get_message()
+    
+    
+    
     return data['ref']
 
        

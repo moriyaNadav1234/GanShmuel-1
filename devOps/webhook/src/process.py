@@ -131,6 +131,20 @@ def testingDeploy(branchName):
         return True
 
 
+def testHealthSiblings():
+    results = []
+    results.append('weight app health', subprocess.check_output(f'curl localhost:8081/health'))
+    results.append('billing app health', subprocess.check_output(f'curl localhost:8080/health'))
+    results.append('billing db health', subprocess.check_output(f'curl localhost:8080/db_health'))
+    # checkresults.append(subprocess.check_output(f'curl localhost:8080/db_health'))
+    return results
+
+def runBillingTest():
+    
+
+
+
+
 def terminateContainer():
     pass
     # dosen't kill - problem with names of CTs

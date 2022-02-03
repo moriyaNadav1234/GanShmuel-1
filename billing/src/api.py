@@ -1,3 +1,4 @@
+from cgi import test
 from src import app
 from flask import request,send_file,Response
 from enum import Enum
@@ -8,7 +9,7 @@ import mysql.connector
 import requests
 import xlwt
 import io
-
+import tests
 
 class LOG_TYPE(Enum):
     INFO=0
@@ -380,3 +381,7 @@ def Get_Bill(id):
         "total": total
     }
     return json.dumps(recipet),200,{'Content-Type':'application/json'}
+
+@app.route("/runtests")
+def runtests():
+    return json.dumps(tests())
