@@ -10,6 +10,10 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
+@app.route('/health',methods=['GET'])
+def index():
+    return "OK"
+
 @app.route('/monitoring', methods=['GET'])
 def get_message():
     results = process.testHealthSiblings()
