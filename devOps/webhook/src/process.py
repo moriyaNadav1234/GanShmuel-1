@@ -133,17 +133,11 @@ def testingDeploy(branchName):
 
 def testHealthSiblings():
     results = []
-    results.append('weight app health', subprocess.check_output(f'curl localhost:8081/health'))
-    results.append('billing app health', subprocess.check_output(f'curl localhost:8080/health'))
-    results.append('billing db health', subprocess.check_output(f'curl localhost:8080/db_health'))
+    results.append('weight app health', subprocess.check_output(f'curl 0.0.0.0:8081/health'))
+    results.append('billing app health', subprocess.check_output(f'curl 0.0.0.0:8080/health'))
+    results.append('billing db health', subprocess.check_output(f'curl 0.0.0.0:8080/db_health'))
     # checkresults.append(subprocess.check_output(f'curl localhost:8080/db_health'))
     return results
-
-def runBillingTest():
-    
-
-
-
 
 def terminateContainer():
     pass
