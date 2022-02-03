@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 from unittest import case
 # from constants import mailAddress, password
 
-mailAddress='devops.yellow.develeap@gmail.comn' #'devopsteam.ganshmuel@gmail.com' #'dorzvulundeveleapbluedevops@gmail.com'
+mailAddress='devops.yellow.develeap@gmail.com' #'devopsteam.ganshmuel@gmail.com' #'dorzvulundeveleapbluedevops@gmail.com'
 password='devops.yellow'  # 'green_devops' #'13578642'
 
 
