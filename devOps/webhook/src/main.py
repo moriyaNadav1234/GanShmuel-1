@@ -8,12 +8,47 @@ app = Flask(__name__)
 
 
 @app.route('/',methods=['GET'])
-def index():
+def index2():
     return render_template("index.html")
 
 @app.route('/health',methods=['GET'])
 def index():
     return "OK"
+
+@app.route('/monitoring', methods=['GET'])
+def get_message():
+    build_billing=""
+    if os.path.isfile("./logs/billing_team_log.txt"): 
+        logB = open("./logs/billing_team_log.txt", 'r')
+        count = 0
+        for i in logB:
+            count+=1
+        logB.seek(0)
+        try:
+            build_billing = logB.readlines()[count-1].split(" ")[4]
+        except:
+            print("error")
+        logB.close()
+    else:
+        process.dockerBuild("billing")
+
+    build_weight=""
+    if os.path.isfile("./logs/weight_team_log.txt"): 
+        logW = open("./logs/weight_team_log.txt", 'r')
+        count = 0
+        for i in logW:
+            count+=1
+        logW.seek(0)
+        try:
+            build_weight = logW.readlines()[count-1].split(" ")[4]
+        except:
+            print("error")
+        logW.close()
+    else:
+        process.dockerBuild("weight")
+
+
+    return {"buildBilling":build_billing[0:6],"buildWeight":build_weight[0:6]}
 
 
 @app.route("/webhook", methods=['POST'])
